@@ -1,0 +1,141 @@
+# APPA Configuration File
+# Awesome-PHM-Paper-Agent System Configuration
+
+# Search Parameters
+search_parameters:
+  # Primary search keywords for PHM research
+  keywords:
+    - "prognostics and health management"
+    - "fault diagnosis"
+    - "condition monitoring"
+    - "predictive maintenance"
+    - "remaining useful life"
+    - "health assessment"
+    - "anomaly detection"
+    - "failure prediction"
+    - "system reliability"
+    - "degradation modeling"
+  
+  # Time range for paper search (format: "YYYY-YYYY")
+  time_range: "2020-2024"
+  
+  # Maximum results per API source
+  max_results_per_source: 100
+  
+  # Date cutoff for incremental updates (ISO format: YYYY-MM-DD)
+  # Only papers published after this date will be processed in incremental updates
+  incremental_update_date: "2024-01-01"
+
+# Quality Filters
+quality_filters:
+  # Whitelist of high-quality venues (journals and conferences)
+  venue_whitelist:
+    # Top-tier journals
+    - "Mechanical Systems and Signal Processing"
+    - "Reliability Engineering & System Safety"
+    - "IEEE Transactions on Reliability"
+    - "IEEE Transactions on Industrial Electronics"
+    - "IEEE Transactions on Instrumentation and Measurement"
+    - "Journal of Sound and Vibration"
+    - "Expert Systems with Applications"
+    - "Engineering Applications of Artificial Intelligence"
+    - "Computers & Industrial Engineering"
+    - "International Journal of Prognostics and Health Management"
+    
+    # Top-tier conferences
+    - "Annual Conference of the PHM Society"
+    - "IEEE International Conference on Prognostics and Health Management"
+    - "IFAC World Congress"
+    - "IEEE Conference on Control Technology and Applications"
+    - "International Conference on Condition Monitoring and Diagnosis"
+  
+  # Minimum citation count threshold
+  min_citations: 5
+  
+  # Acceptable venue quartiles (Q1 = top 25%, Q2 = top 50%, etc.)
+  venue_quartile: ["Q1", "Q2"]
+  
+  # Minimum H5-index for venue acceptance (optional)
+  min_h5_index: 20
+  
+  # Minimum publication year (papers older than this will be filtered out)
+  min_publication_year: 2015
+
+# Output Preferences
+output_preferences:
+  # Summary length preference
+  summary_length: "medium"  # Options: "short", "medium", "long"
+  
+  # Include reproducibility assessment in deep analysis
+  include_reproducibility: true
+  
+  # How often to refresh citation counts (in days)
+  citation_refresh_days: 30
+  
+  # Maximum number of papers to process in a single run
+  max_papers_per_run: 50
+  
+  # Language preference for papers
+  language: "en"  # English only for now
+
+# API Configuration
+api_configuration:
+  # Rate limits (requests per second) for each API
+  rate_limits:
+    openalex: 10          # OpenAlex API rate limit
+    semantic_scholar: 1   # Semantic Scholar API rate limit
+    crossref: 5          # Crossref API rate limit
+    arxiv: 3             # arXiv API rate limit
+  
+  # Request timeout in seconds
+  timeout_seconds: 30
+  
+  # Retry configuration
+  max_retries: 3
+  retry_delay: 2  # seconds
+  
+  # User agent string for API requests
+  user_agent: "APPA/1.0 (Awesome-PHM-Paper-Agent; Academic Research Tool)"
+
+# File System Configuration
+filesystem:
+  # Maximum length for folder names
+  max_folder_name_length: 100
+  
+  # Character replacement rules for folder names
+  invalid_chars_replacement: "-"
+  
+  # Backup configuration
+  create_backups: true
+  backup_retention_days: 30
+
+# Logging Configuration
+logging:
+  # Log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  level: "INFO"
+  
+  # Log file location
+  file: "logs/appa.log"
+  
+  # Maximum log file size (MB)
+  max_file_size: 10
+  
+  # Number of backup log files to keep
+  backup_count: 5
+
+# Advanced Settings
+advanced:
+  # Enable parallel processing
+  enable_parallel: true
+  
+  # Number of worker threads
+  worker_threads: 4
+  
+  # Memory limit per worker (MB)
+  memory_limit_mb: 512
+  
+  # Enable caching of API responses
+  enable_caching: true
+  
+  # Cache expiration time (hours)
+  cache_expiration_hours: 24

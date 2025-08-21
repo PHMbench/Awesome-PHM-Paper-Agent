@@ -1,0 +1,48 @@
+# APPA (Awesome-PHM-Paper-Agent) Dependencies
+
+# Core dependencies
+pyyaml>=6.0.1              # Configuration file parsing
+requests>=2.31.0           # HTTP requests for API calls
+urllib3>=2.0.0             # URL handling and HTTP client
+python-dateutil>=2.8.2    # Date parsing and manipulation
+
+# Academic API clients
+scholarly>=1.7.11          # Google Scholar API
+arxiv>=1.4.8              # arXiv API client
+crossref-commons>=0.0.7   # Crossref API utilities
+
+# Data processing and analysis
+pandas>=2.1.0             # Data manipulation and analysis
+numpy>=1.24.0             # Numerical computing
+beautifulsoup4>=4.12.0    # HTML/XML parsing
+lxml>=4.9.0               # XML/HTML parser
+
+# Text processing and NLP
+nltk>=3.8.1               # Natural language processing
+textstat>=0.7.3           # Text readability statistics
+python-Levenshtein>=0.21.1  # String similarity for deduplication
+
+# File and data handling
+bibtexparser>=1.4.0       # BibTeX file parsing and generation
+markdown>=3.5.0           # Markdown processing
+jinja2>=3.1.0             # Template engine for file generation
+
+# Logging and monitoring
+colorlog>=6.7.0           # Colored logging output
+tqdm>=4.66.0              # Progress bars
+psutil>=5.9.0             # System and process utilities
+
+# Testing and development
+pytest>=7.4.0            # Testing framework
+pytest-cov>=4.1.0        # Coverage reporting
+pytest-mock>=3.11.0      # Mocking for tests
+black>=23.7.0             # Code formatting
+flake8>=6.0.0             # Code linting
+mypy>=1.5.0               # Type checking
+
+# Optional dependencies for enhanced functionality
+# Uncomment if needed:
+# selenium>=4.11.0         # Web scraping for complex sites
+# fake-useragent>=1.3.0    # Random user agents for requests
+# redis>=4.6.0             # Caching backend
+# celery>=5.3.0            # Distributed task queue
