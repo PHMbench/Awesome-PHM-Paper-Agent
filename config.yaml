@@ -99,12 +99,17 @@ api_configuration:
 
 # File System Configuration
 filesystem:
+  # Base output directory for all APPA files and folders
+  # Can be absolute path (/data/appa-output) or relative (./output)
+  # Defaults to current directory if not specified
+  output_directory: "."
+
   # Maximum length for folder names
   max_folder_name_length: 100
-  
+
   # Character replacement rules for folder names
   invalid_chars_replacement: "-"
-  
+
   # Backup configuration
   create_backups: true
   backup_retention_days: 30
@@ -123,19 +128,69 @@ logging:
   # Number of backup log files to keep
   backup_count: 5
 
+# LLM Configuration
+llm:
+  # Enable LLM-powered analysis (requires API keys)
+  enabled: false
+
+  # Primary LLM provider (openai, anthropic, local, or disabled)
+  provider: "openai"
+
+  # API configuration for different providers
+  providers:
+    openai:
+      api_key: ""  # Set your OpenAI API key here or use environment variable OPENAI_API_KEY
+      model: "gpt-4"  # gpt-4, gpt-3.5-turbo, etc.
+      max_tokens: 2000
+      temperature: 0.3
+
+    anthropic:
+      api_key: ""  # Set your Anthropic API key here or use environment variable ANTHROPIC_API_KEY
+      model: "claude-3-sonnet-20240229"  # claude-3-sonnet, claude-3-haiku, etc.
+      max_tokens: 2000
+      temperature: 0.3
+
+    local:
+      base_url: "http://localhost:11434"  # Ollama default URL
+      model: "llama2"  # Local model name
+      max_tokens: 2000
+      temperature: 0.3
+
+  # Rate limiting for LLM requests
+  rate_limits:
+    requests_per_minute: 60
+    requests_per_hour: 1000
+
+  # LLM feature configuration
+  features:
+    # Enhanced content analysis using LLMs
+    enhanced_analysis: true
+
+    # Smart quality assessment beyond metrics
+    smart_quality: true
+
+    # Automated topic categorization
+    auto_categorization: true
+
+    # Semantic relationship detection
+    semantic_relations: true
+
+    # Fallback to traditional methods if LLM fails
+    fallback_enabled: true
+
 # Advanced Settings
 advanced:
   # Enable parallel processing
   enable_parallel: true
-  
+
   # Number of worker threads
   worker_threads: 4
-  
+
   # Memory limit per worker (MB)
   memory_limit_mb: 512
-  
+
   # Enable caching of API responses
   enable_caching: true
-  
+
   # Cache expiration time (hours)
   cache_expiration_hours: 24

@@ -24,7 +24,7 @@ class BaseAgent(ABC, LoggerMixin):
     def __init__(self, config: Dict[str, Any], name: Optional[str] = None):
         """
         Initialize the agent.
-        
+
         Args:
             config: System configuration dictionary
             name: Optional agent name (defaults to class name)
@@ -34,8 +34,11 @@ class BaseAgent(ABC, LoggerMixin):
         self.start_time: Optional[datetime] = None
         self.end_time: Optional[datetime] = None
         self.metrics: Dict[str, Any] = {}
-        
-        self.logger.info(f"Initialized {self.name}")
+
+        # Set up output directory
+        self.output_dir = self._get_output_directory()
+
+        self.logger.info(f"Initialized {self.name} with output directory: {self.output_dir}")
     
     @abstractmethod
     def process(self, input_data: Any) -> Any:
@@ -156,23 +159,56 @@ class BaseAgent(ABC, LoggerMixin):
     def get_config_value(self, key_path: str, default: Any = None) -> Any:
         """
         Get configuration value using dot notation.
-        
+
         Args:
             key_path: Dot-separated path to the value
             default: Default value if key is not found
-            
+
         Returns:
             Configuration value or default
         """
         keys = key_path.split('.')
         value = self.config
-        
+
         try:
             for key in keys:
                 value = value[key]
             return value
         except (KeyError, TypeError):
             return default
+
+    def _get_output_directory(self) -> str:
+        """
+        Get the configured output directory.
+
+        Returns:
+            Absolute path to the output directory
+        """
+        import os
+
+        output_dir = self.get_config_value('filesystem.output_directory', '.')
+
+        # Convert to absolute path
+        if not os.path.isabs(output_dir):
+            output_dir = os.path.abspath(output_dir)
+
+        # Ensure directory exists
+        os.makedirs(output_dir, exist_ok=True)
+
+        return output_dir
+
+    def get_output_path(self, *path_parts: str) -> str:
+        """
+        Get a path relative to the output directory.
+
+        Args:
+            *path_parts: Path components to join
+
+        Returns:
+            Absolute path within the output directory
+        """
+        import os
+        return os.path.join(self.output_dir, *path_parts)
 
 
 class AgentError(Exception):

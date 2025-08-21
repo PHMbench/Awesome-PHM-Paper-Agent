@@ -33,13 +33,13 @@ class FileSystemOrganizationAgent(BaseAgent):
         self.invalid_chars_replacement = self.fs_config.get('invalid_chars_replacement', '-')
         self.create_backups = self.fs_config.get('create_backups', True)
         
-        # Base directories
-        self.base_dir = os.getcwd()
-        self.papers_dir = os.path.join(self.base_dir, 'papers')
-        self.topics_dir = os.path.join(self.base_dir, 'topics')
-        self.venues_dir = os.path.join(self.base_dir, 'venues')
-        self.authors_dir = os.path.join(self.base_dir, 'authors')
-        self.indices_dir = os.path.join(self.base_dir, 'indices')
+        # Base directories using configured output directory
+        self.base_dir = self.output_dir
+        self.papers_dir = self.get_output_path('papers')
+        self.topics_dir = self.get_output_path('topics')
+        self.venues_dir = self.get_output_path('venues')
+        self.authors_dir = self.get_output_path('authors')
+        self.indices_dir = self.get_output_path('indices')
         
         self.logger.info("Initialized File System Organization Agent")
     

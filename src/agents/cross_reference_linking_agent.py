@@ -28,13 +28,13 @@ class CrossReferenceLinkingAgent(BaseAgent):
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config, "CrossReferenceLinkingAgent")
         
-        # Base directories
-        self.base_dir = os.getcwd()
-        self.papers_dir = os.path.join(self.base_dir, 'papers')
-        self.topics_dir = os.path.join(self.base_dir, 'topics')
-        self.venues_dir = os.path.join(self.base_dir, 'venues')
-        self.authors_dir = os.path.join(self.base_dir, 'authors')
-        self.indices_dir = os.path.join(self.base_dir, 'indices')
+        # Base directories using configured output directory
+        self.base_dir = self.output_dir
+        self.papers_dir = self.get_output_path('papers')
+        self.topics_dir = self.get_output_path('topics')
+        self.venues_dir = self.get_output_path('venues')
+        self.authors_dir = self.get_output_path('authors')
+        self.indices_dir = self.get_output_path('indices')
         
         # Link tracking
         self.internal_links: Set[str] = set()

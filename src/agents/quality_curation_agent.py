@@ -14,6 +14,7 @@ from datetime import datetime
 
 from .base_agent import BaseAgent, AgentError
 from ..models import VenueQuartile, VenueType
+from ..utils.llm_client import LLMManager
 
 
 class QualityCurationAgent(BaseAgent):
@@ -36,8 +37,13 @@ class QualityCurationAgent(BaseAgent):
         
         # Load venue rankings database
         self.venue_rankings = self._load_venue_rankings()
-        
+
+        # Initialize LLM manager for smart quality assessment
+        self.llm_manager = LLMManager(config)
+
         self.logger.info(f"Initialized with {len(self.venue_whitelist)} whitelisted venues")
+        if self.llm_manager.get_feature_enabled('smart_quality'):
+            self.logger.info("LLM-enhanced quality assessment enabled")
     
     def process(self, input_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
@@ -147,7 +153,16 @@ class QualityCurationAgent(BaseAgent):
         # Calculate overall quality score
         quality_score = self._calculate_quality_score(quality_metrics, paper)
         quality_metrics['quality_score'] = quality_score
-        
+
+        # Enhance with LLM-based quality assessment if enabled
+        if self.llm_manager.get_feature_enabled('smart_quality'):
+            llm_assessment = self._llm_quality_assessment(paper)
+            if llm_assessment:
+                quality_metrics.update(llm_assessment)
+                # Adjust quality score based on LLM assessment
+                llm_score = llm_assessment.get('llm_quality_score', 0)
+                quality_metrics['quality_score'] = (quality_score + llm_score) / 2
+
         return {
             'passed': True,
             'reason': f'High-quality paper: {venue_evaluation["reason"]}, {citation_count} citations',
@@ -319,6 +334,109 @@ class QualityCurationAgent(BaseAgent):
             'Applied Sciences': 'Q3',
             'Electronics': 'Q3'
         }
+
+    def _llm_quality_assessment(self, paper: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """
+        Use LLM to assess paper quality beyond simple metrics.
+
+        Args:
+            paper: Paper metadata dictionary
+
+        Returns:
+            Dictionary with LLM-based quality metrics or None if assessment fails
+        """
+        title = paper.get('title', '')
+        abstract = paper.get('abstract', '')
+        venue = paper.get('venue', '')
+        year = paper.get('year', 0)
+
+        prompt = f"""
+Please assess the quality of this PHM research paper based on methodology rigor, novelty, and research impact.
+
+Title: {title}
+
+Abstract: {abstract}
+
+Venue: {venue}
+Year: {year}
+
+Please evaluate the following aspects and provide scores from 0.0 to 1.0:
+
+1. **Methodology Rigor**: How sound and well-designed is the research methodology?
+2. **Novelty**: How novel and innovative is the contribution?
+3. **Research Impact**: How significant is the potential impact on the PHM field?
+4. **Technical Quality**: How technically sound and well-executed is the work?
+5. **Clarity**: How clear and well-written is the research presentation?
+
+For each aspect, provide:
+- Score (0.0-1.0)
+- Brief justification (1-2 sentences)
+
+Also provide an overall quality score (0.0-1.0) and assessment.
+
+Format your response as:
+Methodology Rigor: [score] - [justification]
+Novelty: [score] - [justification]
+Research Impact: [score] - [justification]
+Technical Quality: [score] - [justification]
+Clarity: [score] - [justification]
+Overall Quality: [score] - [overall assessment]"""
+
+        try:
+            response = self.llm_manager.generate_text(prompt, max_tokens=600, temperature=0.3)
+            if response:
+                return self._parse_llm_quality_response(response)
+        except Exception as e:
+            self.logger.warning(f"LLM quality assessment failed: {e}")
+
+        return None
+
+    def _parse_llm_quality_response(self, response: str) -> Dict[str, Any]:
+        """Parse LLM quality assessment response."""
+        metrics = {}
+
+        try:
+            lines = response.strip().split('\n')
+
+            for line in lines:
+                line = line.strip()
+                if ':' in line:
+                    key, value = line.split(':', 1)
+                    key = key.strip().lower().replace(' ', '_')
+                    value = value.strip()
+
+                    # Extract score (first number in the value)
+                    import re
+                    score_match = re.search(r'(\d+\.?\d*)', value)
+                    if score_match:
+                        score = float(score_match.group(1))
+
+                        # Normalize score to 0-1 range if needed
+                        if score > 1.0:
+                            score = score / 10.0 if score <= 10.0 else 1.0
+
+                        metrics[f'llm_{key}_score'] = min(max(score, 0.0), 1.0)
+
+                        # Extract justification (text after the score)
+                        justification = value[score_match.end():].strip(' -')
+                        if justification:
+                            metrics[f'llm_{key}_justification'] = justification
+
+            # Set overall LLM quality score
+            if 'llm_overall_quality_score' in metrics:
+                metrics['llm_quality_score'] = metrics['llm_overall_quality_score']
+            else:
+                # Calculate average if overall not provided
+                score_keys = [k for k in metrics.keys() if k.endswith('_score') and k != 'llm_quality_score']
+                if score_keys:
+                    avg_score = sum(metrics[k] for k in score_keys) / len(score_keys)
+                    metrics['llm_quality_score'] = avg_score
+
+        except Exception as e:
+            self.logger.error(f"Error parsing LLM quality response: {e}")
+            return {}
+
+        return metrics
 
 
 if __name__ == "__main__":

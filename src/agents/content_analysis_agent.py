@@ -14,6 +14,7 @@ from datetime import datetime
 
 from .base_agent import BaseAgent, AgentError
 from ..models import AnalysisResult
+from ..utils.llm_client import LLMManager
 
 
 class ContentAnalysisAgent(BaseAgent):
@@ -34,8 +35,15 @@ class ContentAnalysisAgent(BaseAgent):
         # PHM domain knowledge
         self.phm_concepts = self._load_phm_concepts()
         self.methodology_keywords = self._load_methodology_keywords()
-        
+
+        # Initialize LLM manager
+        self.llm_manager = LLMManager(config)
+
         self.logger.info("Initialized Content Analysis Agent")
+        if self.llm_manager.is_enabled():
+            self.logger.info("LLM-enhanced analysis enabled")
+        else:
+            self.logger.info("Using traditional analysis methods")
     
     def process(self, input_data: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
@@ -120,17 +128,65 @@ class ContentAnalysisAgent(BaseAgent):
     def _generate_tldr(self, title: str, abstract: str) -> str:
         """
         Generate TL;DR summary (≤50 words).
-        
+
         Args:
             title: Paper title
             abstract: Paper abstract
-            
+
         Returns:
             TL;DR summary string
         """
+        # Try LLM-enhanced generation first
+        if self.llm_manager.get_feature_enabled('enhanced_analysis'):
+            llm_tldr = self._generate_llm_tldr(title, abstract)
+            if llm_tldr:
+                return llm_tldr
+
+        # Fallback to traditional method
+        return self._generate_traditional_tldr(title, abstract)
+
+    def _generate_llm_tldr(self, title: str, abstract: str) -> str:
+        """Generate TL;DR using LLM."""
+        prompt = f"""
+Please create a concise TL;DR summary (maximum 50 words) for this PHM research paper.
+
+Title: {title}
+
+Abstract: {abstract}
+
+Requirements:
+- Maximum 50 words
+- Focus on the main contribution and methodology
+- Use clear, accessible language
+- Highlight the PHM application domain
+- Do not include citations or references
+
+TL;DR:"""
+
+        try:
+            response = self.llm_manager.generate_text(prompt, max_tokens=100, temperature=0.3)
+            if response:
+                # Clean and validate response
+                tldr = response.strip()
+                if tldr.startswith("TL;DR:"):
+                    tldr = tldr[6:].strip()
+
+                # Ensure word limit
+                words = tldr.split()
+                if len(words) <= 50:
+                    return tldr
+                else:
+                    return ' '.join(words[:47]) + "..."
+        except Exception as e:
+            self.logger.warning(f"LLM TL;DR generation failed: {e}")
+
+        return ""
+
+    def _generate_traditional_tldr(self, title: str, abstract: str) -> str:
+        """Generate TL;DR using traditional methods."""
         # Extract key sentences from abstract
         sentences = self._split_sentences(abstract)
-        
+
         # Find the most informative sentence (usually the first or last)
         key_sentence = ""
         if sentences:
@@ -139,14 +195,14 @@ class ContentAnalysisAgent(BaseAgent):
                 if any(keyword in sentence.lower() for keyword in ['propose', 'develop', 'demonstrate', 'show', 'achieve']):
                     key_sentence = sentence
                     break
-            
+
             if not key_sentence:
                 key_sentence = sentences[0]  # Fallback to first sentence
-        
+
         # Extract main contribution from title and key sentence
         main_method = self._extract_main_method(title + " " + key_sentence)
         main_application = self._extract_main_application(title + " " + key_sentence)
-        
+
         # Construct TL;DR
         if main_method and main_application:
             tldr = f"This paper presents {main_method} for {main_application} in PHM applications."
@@ -156,63 +212,120 @@ class ContentAnalysisAgent(BaseAgent):
             # Fallback: use first 50 words of abstract
             words = abstract.split()[:45]
             tldr = ' '.join(words) + "..."
-        
+
         # Ensure word limit
         tldr_words = tldr.split()
         if len(tldr_words) > 50:
             tldr = ' '.join(tldr_words[:47]) + "..."
-        
+
         return tldr.strip()
     
     def _generate_key_points(self, title: str, abstract: str, keywords: List[str]) -> List[str]:
         """
         Generate 4-6 key points summarizing the paper.
-        
+
         Args:
             title: Paper title
             abstract: Paper abstract
             keywords: Paper keywords
-            
+
         Returns:
             List of key points
         """
+        # Try LLM-enhanced generation first
+        if self.llm_manager.get_feature_enabled('enhanced_analysis'):
+            llm_points = self._generate_llm_key_points(title, abstract, keywords)
+            if llm_points:
+                return llm_points
+
+        # Fallback to traditional method
+        return self._generate_traditional_key_points(title, abstract, keywords)
+
+    def _generate_llm_key_points(self, title: str, abstract: str, keywords: List[str]) -> List[str]:
+        """Generate key points using LLM."""
+        prompt = f"""
+Please extract 4-6 key points from this PHM research paper. Each point should be a single sentence with a bold category label.
+
+Title: {title}
+
+Abstract: {abstract}
+
+Keywords: {', '.join(keywords)}
+
+Please structure the key points as follows:
+- **Objective**: [What problem does this paper address?]
+- **Methodology**: [What approach/method is used?]
+- **Results**: [What are the main findings/performance?]
+- **Application**: [What is the specific PHM application domain?]
+- **Significance**: [Why is this work important/novel?]
+- **Limitations**: [Any limitations mentioned, if applicable]
+
+Provide exactly 4-6 points, each starting with a bold category label followed by a colon.
+
+Key Points:"""
+
+        try:
+            response = self.llm_manager.generate_text(prompt, max_tokens=400, temperature=0.3)
+            if response:
+                # Parse the response into key points
+                lines = response.strip().split('\n')
+                key_points = []
+
+                for line in lines:
+                    line = line.strip()
+                    if line and ('**' in line or line.startswith('-')):
+                        # Clean up the line
+                        if line.startswith('-'):
+                            line = line[1:].strip()
+                        key_points.append(line)
+
+                # Validate we have 4-6 points
+                if 4 <= len(key_points) <= 6:
+                    return key_points
+        except Exception as e:
+            self.logger.warning(f"LLM key points generation failed: {e}")
+
+        return []
+
+    def _generate_traditional_key_points(self, title: str, abstract: str, keywords: List[str]) -> List[str]:
+        """Generate key points using traditional methods."""
         key_points = []
-        
+
         # 1. Objective/Problem
         objective = self._extract_objective(abstract)
         if objective:
             key_points.append(f"**Objective**: {objective}")
-        
+
         # 2. Methodology
         methodology = self._extract_methodology(title, abstract)
         if methodology:
             key_points.append(f"**Methodology**: {methodology}")
-        
+
         # 3. Key Results
         results = self._extract_results(abstract)
         if results:
             key_points.append(f"**Results**: {results}")
-        
+
         # 4. Application Domain
         application = self._extract_application_domain(title, abstract, keywords)
         if application:
             key_points.append(f"**Application**: {application}")
-        
+
         # 5. Significance/Contribution
         significance = self._extract_significance(abstract)
         if significance:
             key_points.append(f"**Significance**: {significance}")
-        
+
         # 6. Limitations (if identifiable)
         limitations = self._extract_limitations(abstract)
         if limitations and len(key_points) < 6:
             key_points.append(f"**Limitations**: {limitations}")
-        
+
         # Ensure we have 4-6 points
         if len(key_points) < 4:
             # Add generic points if needed
             key_points.append("**Domain**: Prognostics and Health Management research")
-            
+
         return key_points[:6]  # Limit to 6 points
     
     def _generate_deep_analysis(self, paper: Dict[str, Any]) -> str:

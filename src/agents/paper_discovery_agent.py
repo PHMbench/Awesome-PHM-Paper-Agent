@@ -19,6 +19,7 @@ import json
 
 from .base_agent import BaseAgent, AgentError
 from ..models import PaperMetadata, PaperIdentifiers, CitationMetrics, QualityMetrics, VenueType, VenueQuartile
+from ..utils.llm_client import LLMManager
 
 
 class PaperDiscoveryAgent(BaseAgent):
@@ -52,6 +53,9 @@ class PaperDiscoveryAgent(BaseAgent):
         # Deduplication tracking
         self.seen_dois: Set[str] = set()
         self.seen_fingerprints: Set[str] = set()
+
+        # Initialize LLM manager for enhanced categorization
+        self.llm_manager = LLMManager(config)
     
     def process(self, input_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """
@@ -269,6 +273,12 @@ class PaperDiscoveryAgent(BaseAgent):
             phm_keywords = self._extract_phm_keywords(title + ' ' + abstract)
             keywords.extend(phm_keywords)
 
+            # Enhance with LLM-based topic extraction if enabled
+            if self.llm_manager.get_feature_enabled('auto_categorization'):
+                llm_topics = self._extract_llm_topics(title, abstract)
+                if llm_topics:
+                    keywords.extend(llm_topics)
+
             return {
                 'title': title,
                 'authors': authors,
@@ -319,6 +329,42 @@ class PaperDiscoveryAgent(BaseAgent):
                 found_keywords.append(term)
 
         return found_keywords
+
+    def _extract_llm_topics(self, title: str, abstract: str) -> List[str]:
+        """Extract PHM topics using LLM."""
+        prompt = f"""
+Please extract relevant PHM (Prognostics and Health Management) research topics from this paper.
+
+Title: {title}
+
+Abstract: {abstract}
+
+Extract 3-5 specific PHM research topics that best categorize this paper. Focus on:
+- Specific methodologies (e.g., "deep learning", "signal processing", "Bayesian methods")
+- Application domains (e.g., "bearing fault diagnosis", "turbine health monitoring", "battery degradation")
+- PHM concepts (e.g., "remaining useful life", "anomaly detection", "predictive maintenance")
+
+Return only the topic keywords, one per line, in lowercase:"""
+
+        try:
+            response = self.llm_manager.generate_text(prompt, max_tokens=200, temperature=0.3)
+            if response:
+                # Parse topics from response
+                topics = []
+                lines = response.strip().split('\n')
+
+                for line in lines:
+                    line = line.strip().lower()
+                    # Remove bullet points, numbers, etc.
+                    line = re.sub(r'^[-*•\d\.)\s]+', '', line)
+                    if line and len(line.split()) <= 4:  # Reasonable topic length
+                        topics.append(line)
+
+                return topics[:5]  # Limit to 5 topics
+        except Exception as e:
+            self.logger.warning(f"LLM topic extraction failed: {e}")
+
+        return []
 
     def _query_semantic_scholar(self, keywords: List[str], start_year: int, end_year: int, max_results: int) -> List[Dict[str, Any]]:
         """Query Semantic Scholar API for papers."""
