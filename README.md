@@ -1,29 +1,72 @@
-# APPA (Awesome-PHM-Paper-Agent)
+# 🔧 APPA (Awesome-PHM-Paper-Agent)
 
-An intelligent academic paper management system designed to automatically retrieve, analyze, and organize high-quality PHM (Prognostics and Health Management) research papers into a structured, cross-referenced knowledge base.
+*An intelligent academic paper management system for PHM research*
 
-## Overview
+> 🌟 **每日更新** | 📚 **智能整理** | 🔗 **双向链接** | 📊 **深度分析**
 
-APPA transforms unstructured academic literature into a navigable, interconnected knowledge repository that accelerates PHM research discovery and analysis through systematic automation and intelligent organization.
+[![Papers](https://img.shields.io/badge/Papers-0-blue)](papers/README.md)
+[![Topics](https://img.shields.io/badge/Topics-10-green)](topics/README.md)
+[![Venues](https://img.shields.io/badge/Venues-15-orange)](venues/README.md)
+[![Authors](https://img.shields.io/badge/Authors-0-purple)](authors/README.md)
 
-### Key Features
+## 🚀 快速导航
 
-- **Automated Paper Discovery**: Queries multiple academic databases (OpenAlex, IEEE Xplore, Semantic Scholar, arXiv)
-- **Quality Curation**: Filters papers based on venue reputation, citation metrics, and quality thresholds
-- **Structured Analysis**: Generates three-tier summaries (TL;DR, Key Points, Deep Analysis)
-- **Cross-Referenced Navigation**: Bidirectional WikiLink system for seamless knowledge exploration
-- **Incremental Updates**: Date-aware processing to avoid duplication and maintain current content
-- **BibTeX Compatibility**: Full integration with reference management tools
+| 📋 分类浏览 | 📊 统计索引 | 🔍 专项查询 | ⚙️ 系统管理 |
+|-------------|-------------|-------------|-------------|
+| [📚 所有论文](papers/README.md) | [📅 按年份](indices/by-year.md) | [🔥 热门主题](topics/README.md) | [⚙️ 配置](config.yaml) |
+| [🏷️ 研究主题](topics/README.md) | [📊 按引用](indices/by-citations.md) | [⭐ 高影响力](indices/by-citations.md) | [📋 任务状态](logs/appa.log) |
+| [📖 期刊会议](venues/README.md) | [🏢 按期刊](indices/by-venue.md) | [🆕 最新发表](indices/by-year.md) | [🔄 更新历史](logs/) |
+| [👥 研究作者](authors/README.md) | [🏷️ 按主题](indices/by-topic.md) | [🔗 相关性网络](papers/README.md) | [📈 系统状态](#statistics) |
 
-### System Architecture
+## 📈 实时统计
 
-APPA uses a decoupled agent architecture where each agent has a single, well-defined responsibility:
+- **📚 论文总数**: 0
+- **🏷️ 主题分类**: 10
+- **📖 期刊会议**: 15
+- **👥 作者数量**: 0
+- **🔄 最后更新**: 未初始化
+- **📅 覆盖周期**: 未配置
 
-1. **Paper Discovery Agent**: Query APIs and deduplicate results
-2. **Quality Curation Agent**: Filter based on quality metrics and venue reputation
-3. **Content Analysis Agent**: Generate structured summaries and extract metadata
-4. **File System Organization Agent**: Create and maintain standardized directory structure
-5. **Cross-Reference Linking Agent**: Implement bidirectional navigation and link validation
+## 🎯 核心功能
+
+APPA将非结构化的学术文献转换为可导航的、互联的知识库，通过系统化自动化和智能组织加速PHM研究的发现和分析。
+
+### ✨ 核心特性
+
+- 🔍 **自动论文发现**: 查询多个学术数据库 (OpenAlex, IEEE Xplore, Semantic Scholar, arXiv)
+- ⭐ **质量筛选**: 基于期刊声誉、引用指标和质量阈值的智能过滤
+- 📝 **结构化分析**: 生成三层次摘要 (TL;DR, 关键点, 深度分析)
+- 🔗 **交叉引用导航**: GitHub友好的双向链接系统，实现无缝知识探索
+- 🔄 **增量更新**: 基于日期的智能处理，避免重复并保持内容最新
+- 📋 **BibTeX兼容**: 与参考文献管理工具完全集成
+
+## 🏗️ 系统架构
+
+APPA采用解耦的多Agent架构，每个Agent都有明确定义的单一职责：
+
+| Agent | 职责 | 工具 | 状态 |
+|-------|------|------|------|
+| 📚 [Paper Discovery](src/agents/paper_discovery_agent.py) | API查询和去重 | Bash, WebFetch, Grep | ✅ 运行中 |
+| ⭐ [Quality Curation](src/agents/quality_curation_agent.py) | 基于质量指标过滤 | Read, Edit, WebFetch | ✅ 运行中 |
+| 📝 [Content Analysis](src/agents/content_analysis_agent.py) | 生成结构化摘要 | LLM, Read, Write | ✅ 运行中 |
+| 🗂️ [File Organization](src/agents/filesystem_organization_agent.py) | 维护标准目录结构 | Write, LS, MultiEdit | ✅ 运行中 |
+| 🔗 [Cross-Reference Linking](src/agents/cross_reference_linking_agent.py) | 实现双向导航 | Edit, Grep, MultiEdit | ✅ 运行中 |
+
+## 📖 双向链接系统
+
+APPA使用GitHub友好的Markdown链接格式，确保在GitHub上直接可点击：
+
+```markdown
+## 相关论文
+- [相似方法论](../2024-TIE-Liu-TransformerFault/index.md) - 基于Transformer的故障诊断
+- [同领域应用](../../2023/2023-REL-Wang-BearingDiagnosis/index.md) - 轴承故障诊断研究
+- [作者其他工作](../../../authors/zhang-wei/README.md) - 张伟的研究概览
+
+## 主题标签
+- [深度学习](../../topics/deep-learning.md)
+- [故障诊断](../../topics/fault-diagnosis.md)
+- [轴承监测](../../topics/bearing-monitoring.md)
+```
 
 ## Quick Start
 
