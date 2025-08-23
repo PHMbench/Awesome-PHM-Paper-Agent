@@ -46,10 +46,10 @@ class APPAOrchestrator:
             setup_logging(self.config)
             self.logger = get_logger(__name__)
             
-            # Initialize agents
-            self.discovery_agent = PaperDiscoveryAgent(self.config)
+            # Initialize agents (with enhanced discovery agent)
+            self.discovery_agent = PaperDiscoveryAgent(self.config)  # Now delegates to enhanced agent
             self.curation_agent = QualityCurationAgent(self.config)
-            self.analysis_agent = ContentAnalysisAgent(self.config)
+            self.analysis_agent = ContentAnalysisAgent(self.config)  # Now uses enhanced analysis
             self.organization_agent = FileSystemOrganizationAgent(self.config)
             self.linking_agent = CrossReferenceLinkingAgent(self.config)
             
