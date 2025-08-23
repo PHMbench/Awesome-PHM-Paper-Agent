@@ -1,0 +1,34 @@
+# Joint Knowledge Graph and Large Language Model for Fault Diagnosis and Its Application in Aviation Assembly
+
+**作者**: Peifeng LIU (华中科技大学), Lu Qian (武汉理工大学), Xingwei Zhao (华中科技大学), Bo Tao (华中科技大学)
+
+**发表年份**: 2024
+
+**来源**: IEEE Transactions on Industrial Informatics
+
+**期刊/会议**: IEEE Transactions on Industrial Informatics, Vol. 20, No. 6, pp. 8160-8169
+
+**DOI**: 10.1109/TII.2024.3366977
+
+## 摘要
+
+本研究提出了一种将航空装配知识图谱(KG)嵌入到大语言模型(LLM)中的新颖方法，用于复杂工业装配环境中的故障定位。该模型利用知识图谱中的图结构化大数据对LLM进行前缀调优，实现在线重配置的同时避免大量计算负载。
+
+该方法的核心创新包括：使用图结构化数据进行LLM的前缀调优、实现模型的在线重配置而无需大量计算负载、加强特定领域知识用于故障定位，以及在航空装配场景中实现故障诊断和故障排除的98.5%准确率。
+
+模型能够"生成知识子图，通过检索增强融合知识，并最终为复杂的工业故障诊断场景提供基于知识的推理响应"。这种方法为在复杂工业环境中集成结构化知识与大语言模型的推理能力提供了有效的解决方案。
+
+## 引用
+
+```bibtex
+@article{liu2024joint,
+  title={Joint Knowledge Graph and Large Language Model for Fault Diagnosis and Its Application in Aviation Assembly},
+  author={Liu, Peifeng and Qian, Lu and Zhao, Xingwei and Tao, Bo},
+  journal={IEEE Transactions on Industrial Informatics},
+  year={2024},
+  volume={20},
+  number={6},
+  pages={8160--8169},
+  doi={10.1109/TII.2024.3366977}
+}
+```

@@ -22,6 +22,14 @@ from .base_agent import BaseAgent, AgentError
 from ..models import AnalysisResult
 from ..utils.llm_client import LLMManager
 from ..utils.mcp_integration import MCPAcademicTools
+from ..utils.paper_utils import (
+    calculate_phm_relevance_score, classify_methodology, 
+    identify_application_domains, assess_venue_quality
+)
+from ..utils.phm_constants import (
+    PHM_CONCEPTS, METHODOLOGY_KEYWORDS, APPLICATION_DOMAINS,
+    VENUE_QUALITY_MAPPING, RELEVANCE_THRESHOLDS
+)
 
 
 class ContentAnalysisAgent(BaseAgent):
@@ -50,10 +58,10 @@ class ContentAnalysisAgent(BaseAgent):
         self.include_methodology_extraction = self.analysis_config.get('include_methodology_extraction', True)
         self.enable_multilingual = self.analysis_config.get('enable_multilingual', True)
         
-        # PHM domain knowledge
-        self.phm_concepts = self._load_enhanced_phm_concepts()
-        self.methodology_keywords = self._load_methodology_keywords()
-        self.application_domains = self._load_application_domains()
+        # PHM domain knowledge from centralized constants
+        self.phm_concepts = PHM_CONCEPTS
+        self.methodology_keywords = METHODOLOGY_KEYWORDS
+        self.application_domains = APPLICATION_DOMAINS
 
         # Initialize LLM manager and MCP tools
         self.llm_manager = LLMManager(config)
@@ -136,8 +144,14 @@ class ContentAnalysisAgent(BaseAgent):
         }
         
         try:
-            # Tier 1: TL;DR Generation
-            analysis['tldr'] = self._generate_tldr_analysis(title, abstract)
+            # Tier 1: TL;DR Generation using centralized function
+            paper_dict = {'title': title, 'abstract': abstract}
+            tldr_chinese = generate_tldr_summary(paper_dict, self.llm_manager, 'chinese')
+            tldr_english = generate_tldr_summary(paper_dict, self.llm_manager, 'english')
+            analysis['tldr'] = {
+                'chinese_summary': tldr_chinese or 'TL;DR generation not available',
+                'english_summary': tldr_english or 'TL;DR generation not available'
+            }
             
             # Tier 2: Key Points Extraction
             analysis['key_points'] = self._extract_key_points(title, abstract, keywords)
@@ -154,8 +168,8 @@ class ContentAnalysisAgent(BaseAgent):
                 analysis['reproducibility'] = self._assess_reproducibility(paper)
             
             # Additional enhancements
-            analysis['methodology_classification'] = self._classify_methodology(title, abstract)
-            analysis['application_domain'] = self._identify_application_domain(title, abstract)
+            analysis['methodology_classification'] = classify_methodology(paper)
+            analysis['application_domain'] = identify_application_domains(paper)
             analysis['phm_relevance'] = self._calculate_phm_relevance_detailed(paper)
             
             # Quality indicators
@@ -169,53 +183,6 @@ class ContentAnalysisAgent(BaseAgent):
         
         return analysis
     
-    def _generate_tldr_analysis(self, title: str, abstract: str) -> Dict[str, str]:
-        """Generate TL;DR summaries in multiple languages."""
-        tldr = {}
-        
-        if self.llm_manager.is_enabled():
-            # Chinese TL;DR (primary for user readability)
-            chinese_prompt = f"""
-请为这篇PHM论文生成一个简洁的TL;DR摘要(不超过50字):
-
-标题: {title}
-摘要: {abstract}
-
-要求:
-- 突出主要贡献和创新点
-- 包含使用的方法和取得的效果
-- 用简洁易懂的中文表达
-- 不超过50个中文字符
-"""
-            try:
-                chinese_tldr = self.llm_manager.generate_text(chinese_prompt, max_tokens=150, temperature=0.3)
-                if chinese_tldr and len(chinese_tldr.strip()) > 10:
-                    tldr['chinese'] = chinese_tldr.strip()
-            except Exception as e:
-                self.logger.warning(f"Chinese TL;DR generation failed: {e}")
-            
-            # English TL;DR
-            english_prompt = f"""
-Generate a concise TL;DR summary (max 30 words) for this PHM research paper:
-
-Title: {title}
-Abstract: {abstract}
-
-Focus on: main contribution, method used, and key result/improvement.
-Keep it under 30 words.
-"""
-            try:
-                english_tldr = self.llm_manager.generate_text(english_prompt, max_tokens=100, temperature=0.3)
-                if english_tldr and len(english_tldr.strip()) > 10:
-                    tldr['english'] = english_tldr.strip()
-            except Exception as e:
-                self.logger.warning(f"English TL;DR generation failed: {e}")
-        
-        # Fallback to keyword-based summary
-        if not tldr:
-            tldr = self._generate_keyword_tldr(title, abstract)
-        
-        return tldr
     
     def _extract_key_points(self, title: str, abstract: str, keywords: List[str]) -> Dict[str, Any]:
         """Extract key points including objectives, methods, and contributions."""
@@ -408,119 +375,7 @@ Provide insightful analysis for each aspect.
         
         return reproducibility
     
-    def _classify_methodology(self, title: str, abstract: str) -> Dict[str, Any]:
-        """Classify methodology used in the paper."""
-        text = (title + ' ' + abstract).lower()
-        
-        methodologies = {
-            'primary_category': 'Other',
-            'secondary_categories': [],
-            'specific_methods': [],
-            'confidence_score': 0.0
-        }
-        
-        # Method categories with keywords
-        method_categories = {
-            'Deep Learning': {
-                'keywords': ['deep learning', 'neural network', 'cnn', 'lstm', 'transformer', 'autoencoder', 'gan'],
-                'weight': 1.0
-            },
-            'Machine Learning': {
-                'keywords': ['machine learning', 'svm', 'random forest', 'decision tree', 'ensemble', 'clustering'],
-                'weight': 0.9
-            },
-            'Signal Processing': {
-                'keywords': ['signal processing', 'fft', 'wavelet', 'frequency analysis', 'time-frequency'],
-                'weight': 0.8
-            },
-            'Statistical Methods': {
-                'keywords': ['statistical', 'bayesian', 'gaussian', 'monte carlo', 'regression', 'kalman'],
-                'weight': 0.7
-            },
-            'Physics-Based Modeling': {
-                'keywords': ['physics-based', 'mathematical model', 'analytical', 'finite element', 'simulation'],
-                'weight': 0.6
-            },
-            'Hybrid Approaches': {
-                'keywords': ['hybrid', 'combined', 'integrated', 'fusion', 'multi-modal'],
-                'weight': 0.8
-            }
-        }
-        
-        scores = {}
-        for category, info in method_categories.items():
-            score = 0
-            found_methods = []
-            for keyword in info['keywords']:
-                if keyword in text:
-                    score += info['weight']
-                    found_methods.append(keyword)
-            
-            if score > 0:
-                scores[category] = score
-                methodologies['specific_methods'].extend(found_methods)
-        
-        if scores:
-            # Primary category (highest score)
-            primary = max(scores.items(), key=lambda x: x[1])
-            methodologies['primary_category'] = primary[0]
-            methodologies['confidence_score'] = min(primary[1], 1.0)
-            
-            # Secondary categories
-            sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-            methodologies['secondary_categories'] = [cat for cat, score in sorted_scores[1:3] if score > 0.3]
-        
-        return methodologies
     
-    def _identify_application_domain(self, title: str, abstract: str) -> Dict[str, Any]:
-        """Identify application domain of the research."""
-        text = (title + ' ' + abstract).lower()
-        
-        domain_info = {
-            'primary_domain': 'General PHM',
-            'secondary_domains': [],
-            'specific_applications': [],
-            'industrial_relevance': 'medium'
-        }
-        
-        # Application domains with keywords
-        domains = {
-            'Rotating Machinery': ['bearing', 'gear', 'rotor', 'shaft', 'rotating', 'centrifugal', 'pump'],
-            'Electric Motors': ['motor', 'electric machine', 'induction', 'synchronous', 'electrical'],
-            'Aerospace Systems': ['aircraft', 'aerospace', 'jet engine', 'turbine', 'aviation', 'flight'],
-            'Automotive Systems': ['vehicle', 'automotive', 'engine', 'transmission', 'brake', 'car'],
-            'Power Systems': ['power system', 'transformer', 'generator', 'grid', 'electrical power'],
-            'Industrial Process': ['process monitoring', 'manufacturing', 'chemical process', 'production'],
-            'Energy Systems': ['wind turbine', 'solar', 'battery', 'energy storage', 'renewable'],
-            'Infrastructure': ['bridge', 'building', 'structural', 'civil', 'infrastructure'],
-            'Marine Systems': ['ship', 'marine', 'offshore', 'vessel', 'maritime'],
-            'Rail Systems': ['railway', 'train', 'rail', 'locomotive', 'metro']
-        }
-        
-        domain_scores = {}
-        for domain, keywords in domains.items():
-            score = sum(1 for keyword in keywords if keyword in text)
-            if score > 0:
-                domain_scores[domain] = score
-                # Extract specific applications
-                found_apps = [kw for kw in keywords if kw in text]
-                domain_info['specific_applications'].extend(found_apps)
-        
-        if domain_scores:
-            # Primary domain
-            primary = max(domain_scores.items(), key=lambda x: x[1])
-            domain_info['primary_domain'] = primary[0]
-            
-            # Secondary domains
-            sorted_domains = sorted(domain_scores.items(), key=lambda x: x[1], reverse=True)
-            domain_info['secondary_domains'] = [domain for domain, score in sorted_domains[1:3] if score > 0]
-            
-            # Industrial relevance assessment
-            industrial_keywords = ['industrial', 'industry', 'manufacturing', 'commercial', 'plant', 'factory']
-            if any(kw in text for kw in industrial_keywords):
-                domain_info['industrial_relevance'] = 'high'
-        
-        return domain_info
     
     def _calculate_phm_relevance_detailed(self, paper: Dict[str, Any]) -> Dict[str, Any]:
         """Calculate detailed PHM relevance score."""
@@ -538,68 +393,17 @@ Provide insightful analysis for each aspect.
             'relevance_explanation': ''
         }
         
-        # Core PHM concepts with weights
-        phm_concepts = {
-            'prognostics': 1.0,
-            'health management': 1.0,
-            'fault diagnosis': 0.9,
-            'predictive maintenance': 0.9,
-            'condition monitoring': 0.8,
-            'remaining useful life': 0.9,
-            'rul': 0.9,
-            'degradation': 0.7,
-            'anomaly detection': 0.6,
-            'failure prediction': 0.8,
-            'health assessment': 0.7,
-            'prognosis': 0.8,
-            'reliability': 0.6,
-            'maintenance': 0.5,
-            'fault detection': 0.7
-        }
+        # Use centralized PHM relevance calculation
+        overall_score, detailed_scores = calculate_phm_relevance_score(paper)
         
-        # Calculate relevance scores
-        title_score = 0.0
-        abstract_score = 0.0
-        keyword_score = 0.0
-        found_concepts = []
-        
-        for concept, weight in phm_concepts.items():
-            if concept in title:
-                title_score += weight * 2  # Title gets double weight
-                found_concepts.append(concept)
-            if concept in abstract:
-                abstract_score += weight
-                if concept not in found_concepts:
-                    found_concepts.append(concept)
-            if concept in ' '.join(keywords):
-                keyword_score += weight
-                if concept not in found_concepts:
-                    found_concepts.append(concept)
-        
-        # Normalize scores
-        relevance['title_relevance'] = min(title_score / 4, 1.0)  # Max 2 concepts with weight 2
-        relevance['abstract_relevance'] = min(abstract_score / 3, 1.0)  # Max 3 concepts
-        relevance['keyword_relevance'] = min(keyword_score / 2, 1.0)  # Max 2 concepts
-        
-        # Domain alignment (check if it's a PHM-relevant domain)
-        phm_domains = ['rotating machinery', 'electric motors', 'aerospace', 'automotive', 'energy systems']
-        domain_alignment = 0.0
-        text = title + ' ' + abstract
-        for domain in phm_domains:
-            if domain.replace(' ', '') in text.replace(' ', ''):
-                domain_alignment += 0.2
-        
-        relevance['domain_alignment'] = min(domain_alignment, 1.0)
-        relevance['phm_concepts_found'] = found_concepts
-        
-        # Overall score calculation
-        overall = (
-            relevance['title_relevance'] * 0.4 +
-            relevance['abstract_relevance'] * 0.3 +
-            relevance['keyword_relevance'] * 0.2 +
-            relevance['domain_alignment'] * 0.1
-        )
-        relevance['overall_score'] = overall
+        # Map to expected format for backward compatibility
+        relevance['title_relevance'] = detailed_scores.get('title_score', 0.0)
+        relevance['abstract_relevance'] = detailed_scores.get('abstract_score', 0.0)
+        relevance['keyword_relevance'] = detailed_scores.get('keyword_score', 0.0)
+        relevance['domain_alignment'] = detailed_scores.get('venue_score', 0.0)
+        relevance['phm_concepts_found'] = list(detailed_scores.get('concept_scores', {}).keys())
+        relevance['overall_score'] = overall_score
+        overall = overall_score  # For explanation generation below
         
         # Generate explanation
         if overall >= 0.8:
@@ -861,88 +665,11 @@ Provide insightful analysis for each aspect.
     
     # Domain knowledge loading methods
     
-    def _load_enhanced_phm_concepts(self) -> Dict[str, float]:
-        """Load enhanced PHM concepts with relevance weights."""
-        return {
-            'prognostics': 1.0,
-            'health management': 1.0,
-            'fault diagnosis': 0.9,
-            'predictive maintenance': 0.9,
-            'condition monitoring': 0.8,
-            'remaining useful life': 0.9,
-            'degradation modeling': 0.8,
-            'anomaly detection': 0.7,
-            'failure prediction': 0.8,
-            'reliability engineering': 0.7,
-            'system health': 0.8,
-            'maintenance optimization': 0.7,
-            'diagnostic systems': 0.7,
-            'prognostic algorithms': 0.9,
-            'health indicators': 0.8
-        }
+    # PHM concepts moved to phm_constants.PHM_CONCEPTS
     
-    def _load_methodology_keywords(self) -> Dict[str, List[str]]:
-        """Load methodology keywords for classification."""
-        return {
-            'Machine Learning': [
-                'machine learning', 'supervised learning', 'unsupervised learning',
-                'support vector machine', 'svm', 'random forest', 'decision tree',
-                'k-means', 'clustering', 'classification', 'regression',
-                'ensemble learning', 'boosting', 'bagging'
-            ],
-            'Deep Learning': [
-                'deep learning', 'neural network', 'artificial neural network',
-                'convolutional neural network', 'cnn', 'lstm', 'rnn', 'gru',
-                'transformer', 'attention mechanism', 'autoencoder',
-                'generative adversarial network', 'gan', 'deep belief network'
-            ],
-            'Signal Processing': [
-                'signal processing', 'digital signal processing', 'fft',
-                'fast fourier transform', 'wavelet', 'wavelet transform',
-                'time-frequency analysis', 'spectral analysis', 'filtering',
-                'frequency domain', 'time domain', 'stft', 'hilbert transform'
-            ],
-            'Statistical Methods': [
-                'statistical analysis', 'bayesian', 'bayesian inference',
-                'monte carlo', 'markov chain', 'gaussian process',
-                'principal component analysis', 'pca', 'independent component analysis',
-                'factor analysis', 'regression analysis', 'hypothesis testing'
-            ],
-            'Physics-Based': [
-                'physics-based model', 'mathematical model', 'analytical model',
-                'finite element', 'fem', 'computational model', 'simulation',
-                'numerical analysis', 'differential equation', 'state space'
-            ]
-        }
+    # Methodology keywords moved to phm_constants.METHODOLOGY_KEYWORDS
     
-    def _load_application_domains(self) -> Dict[str, List[str]]:
-        """Load application domain keywords."""
-        return {
-            'Rotating Machinery': [
-                'bearing', 'gear', 'gearbox', 'rotor', 'shaft', 'pump',
-                'compressor', 'turbine', 'motor', 'fan', 'centrifugal'
-            ],
-            'Aerospace': [
-                'aircraft', 'airplane', 'jet engine', 'gas turbine', 'aviation',
-                'flight', 'aerospace', 'propeller', 'helicopter', 'drone'
-            ],
-            'Automotive': [
-                'vehicle', 'car', 'automobile', 'engine', 'transmission',
-                'brake', 'suspension', 'automotive', 'hybrid', 'electric vehicle'
-            ],
-            'Power Systems': [
-                'power grid', 'transformer', 'generator', 'electrical power',
-                'power system', 'substation', 'transmission line', 'distribution'
-            ],
-            'Energy Systems': [
-                'wind turbine', 'solar panel', 'battery', 'energy storage',
-                'renewable energy', 'fuel cell', 'photovoltaic', 'hydropower'
-            ],
-            'Industrial Process': [
-                'manufacturing', 'chemical process', 'production line',
-                'industrial equipment', 'factory', 'plant', 'process control'
-            ]
-        }
+    # Application domains moved to phm_constants.APPLICATION_DOMAINS
 
 
 # Export functions for external use

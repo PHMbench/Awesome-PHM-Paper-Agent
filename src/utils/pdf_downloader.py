@@ -15,6 +15,13 @@ from pathlib import Path
 import mimetypes
 
 from .logging_config import get_logger
+from .paper_utils import (
+    validate_doi, sanitize_filename, assess_venue_quality
+)
+from .phm_constants import (
+    VENUE_QUALITY_MAPPING, DEFAULT_CONFIG
+)
+from .nature_access_helper import NatureAccessHelper, get_nature_paper_safely
 
 
 class PDFDownloader:
@@ -59,6 +66,9 @@ class PDFDownloader:
             'Accept': 'application/pdf,*/*',
             'Accept-Language': 'en-US,en;q=0.9'
         })
+        
+        # Initialize specialized access helpers
+        self.nature_helper = NatureAccessHelper(config)
         
         self.logger.info(f"PDF Downloader initialized, download directory: {self.download_dir}")
     
@@ -161,6 +171,11 @@ class PDFDownloader:
         Returns:
             True if successful, False otherwise
         """
+        # Check if this is a Nature URL and handle specially
+        if self.nature_helper.is_nature_url(url):
+            self.logger.info(f"Detected Nature URL, using specialized handler: {url}")
+            return self._handle_nature_download(url, filepath)
+        
         for attempt in range(self.max_retries):
             try:
                 # Add delay between attempts
@@ -264,6 +279,196 @@ class PDFDownloader:
             self.logger.warning(f"Failed to extract PDF link from HTML: {e}")
         
         return None
+    
+    def _handle_nature_download(self, url: str, filepath: Path) -> bool:
+        """
+        Handle Nature URLs with specialized access methods.
+        
+        Nature papers often require special handling due to access restrictions.
+        This method attempts multiple strategies to access the content.
+        """
+        try:
+            self.logger.info(f"Attempting Nature-specific download: {url}")
+            
+            # Get paper info using Nature helper
+            paper_info = self.nature_helper.get_nature_paper_info(url)
+            
+            if not paper_info:
+                self.logger.warning(f"Failed to get Nature paper info for: {url}")
+                return False
+            
+            access_status = paper_info.get('access_status', 'unknown')
+            self.logger.info(f"Nature access status: {access_status}")
+            
+            # Strategy 1: Try direct PDF access if available
+            if access_status in ['partial_success', 'metadata_available']:
+                # Look for PDF URLs in the paper info
+                if 'pdf_url' in paper_info:
+                    pdf_success = self._try_nature_pdf_download(paper_info['pdf_url'], filepath)
+                    if pdf_success:
+                        return True
+            
+            # Strategy 2: Create metadata file instead of PDF
+            if access_status in ['restricted', 'metadata_only']:
+                self.logger.info(f"PDF access restricted, creating metadata file for Nature paper")
+                return self._create_nature_metadata_file(paper_info, filepath)
+            
+            # Strategy 3: Try alternative access methods
+            if access_status == 'limited':
+                return self._try_nature_alternative_access(url, paper_info, filepath)
+            
+            self.logger.warning(f"All Nature download strategies failed for: {url}")
+            return False
+            
+        except Exception as e:
+            self.logger.error(f"Nature download handler failed: {e}")
+            return False
+    
+    def _try_nature_pdf_download(self, pdf_url: str, filepath: Path) -> bool:
+        """Try downloading PDF from Nature-specific URL."""
+        try:
+            # Use Nature helper's session for consistency
+            response = self.nature_helper.session.get(
+                pdf_url, 
+                timeout=self.timeout_seconds,
+                stream=True
+            )
+            
+            if response.status_code == 200:
+                content_type = response.headers.get('content-type', '').lower()
+                if 'pdf' in content_type:
+                    # Save PDF content
+                    with open(filepath, 'wb') as f:
+                        for chunk in response.iter_content(chunk_size=8192):
+                            if chunk:
+                                f.write(chunk)
+                    
+                    self.logger.info(f"Successfully downloaded Nature PDF: {filepath}")
+                    return True
+                else:
+                    self.logger.warning(f"Nature URL did not return PDF content: {content_type}")
+            else:
+                self.logger.warning(f"Nature PDF download failed with status: {response.status_code}")
+            
+            return False
+            
+        except Exception as e:
+            self.logger.error(f"Nature PDF download error: {e}")
+            return False
+    
+    def _create_nature_metadata_file(self, paper_info: Dict[str, Any], filepath: Path) -> bool:
+        """
+        Create a metadata file for Nature papers when PDF is not accessible.
+        
+        This provides useful paper information even when full text isn't available.
+        """
+        try:
+            # Change extension to .json for metadata
+            metadata_path = filepath.with_suffix('.nature_metadata.json')
+            
+            # Create comprehensive metadata
+            metadata = {
+                'title': paper_info.get('title', 'Unknown Title'),
+                'authors': paper_info.get('authors', []),
+                'journal': paper_info.get('journal', 'Nature Series'),
+                'year': paper_info.get('year'),
+                'doi': paper_info.get('doi', ''),
+                'url': paper_info.get('url', ''),
+                'abstract': paper_info.get('abstract', ''),
+                'access_method': paper_info.get('access_method', 'unknown'),
+                'access_status': paper_info.get('access_status', 'restricted'),
+                'note': paper_info.get('note', 'Full text access may require subscription'),
+                'download_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+                'file_type': 'nature_metadata',
+                'original_request': str(filepath)
+            }
+            
+            # Write metadata to file
+            import json
+            with open(metadata_path, 'w', encoding='utf-8') as f:
+                json.dump(metadata, f, indent=2, ensure_ascii=False)
+            
+            self.logger.info(f"Created Nature metadata file: {metadata_path}")
+            return True
+            
+        except Exception as e:
+            self.logger.error(f"Failed to create Nature metadata file: {e}")
+            return False
+    
+    def _try_nature_alternative_access(self, url: str, paper_info: Dict[str, Any], filepath: Path) -> bool:
+        """Try alternative access methods for Nature papers."""
+        try:
+            # Check for DOI-based access
+            doi = paper_info.get('doi')
+            if doi:
+                # Try Unpaywall API for open access version
+                unpaywall_result = self._check_unpaywall_access(doi)
+                if unpaywall_result:
+                    return self._try_nature_pdf_download(unpaywall_result, filepath)
+            
+            # Check for preprint versions
+            title = paper_info.get('title', '')
+            if title:
+                preprint_url = self._search_preprint_version(title)
+                if preprint_url:
+                    self.logger.info(f"Found potential preprint version: {preprint_url}")
+                    # Try downloading from preprint server
+                    return self._download_from_url(preprint_url, filepath)
+            
+            # Fallback: create metadata file
+            return self._create_nature_metadata_file(paper_info, filepath)
+            
+        except Exception as e:
+            self.logger.error(f"Nature alternative access failed: {e}")
+            return False
+    
+    def _check_unpaywall_access(self, doi: str) -> Optional[str]:
+        """Check Unpaywall API for open access version."""
+        try:
+            unpaywall_url = f"https://api.unpaywall.org/v2/{doi}?email=research@example.com"
+            
+            response = requests.get(unpaywall_url, timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('is_oa'):  # Is Open Access
+                    best_oa = data.get('best_oa_location')
+                    if best_oa and best_oa.get('url_for_pdf'):
+                        return best_oa['url_for_pdf']
+            
+            return None
+            
+        except Exception as e:
+            self.logger.warning(f"Unpaywall check failed: {e}")
+            return None
+    
+    def _search_preprint_version(self, title: str) -> Optional[str]:
+        """Search for preprint version of the paper."""
+        # This is a simplified implementation
+        # In practice, you might want to use APIs from arXiv, bioRxiv, etc.
+        try:
+            # Simple arXiv search (very basic implementation)
+            # This should be expanded with proper API integration
+            import urllib.parse
+            
+            search_query = urllib.parse.quote(title[:100])  # Limit query length
+            arxiv_search_url = f"http://export.arxiv.org/api/query?search_query=ti:{search_query}&max_results=5"
+            
+            response = requests.get(arxiv_search_url, timeout=10)
+            if response.status_code == 200:
+                # Parse XML response to find PDF links
+                # This is a very basic implementation
+                if 'pdf' in response.text.lower():
+                    # Extract first PDF URL (simplified)
+                    import re
+                    pdf_matches = re.findall(r'http://arxiv\.org/pdf/[^<]+', response.text)
+                    if pdf_matches:
+                        return pdf_matches[0]
+            
+            return None
+            
+        except Exception as e:
+            self.logger.warning(f"Preprint search failed: {e}")
+            return None
     
     def _validate_pdf_file(self, filepath: Path) -> bool:
         """
@@ -467,10 +672,11 @@ class PaperValidator:
         return validated_paper
     
     def _validate_doi(self, doi: str) -> Dict[str, Any]:
-        """Validate DOI and retrieve metadata."""
-        result = {'valid': False, 'metadata': {}}
+        """Validate DOI using centralized function."""
+        is_valid = validate_doi(doi)
+        result = {'valid': is_valid, 'metadata': {}}
         
-        if not self.enable_crossref:
+        if not self.enable_crossref or not is_valid:
             return result
         
         try:

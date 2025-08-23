@@ -1,0 +1,232 @@
+# 论文质量过滤配置文件
+# Paper Quality Filter Configuration
+
+# 基础过滤配置
+basic_filters:
+  # 影响因子阈值 (默认值，用户要求IF>=5)
+  impact_factor_threshold: 5.0
+  
+  # 期刊分区要求 (Q1, Q2, Q3, Q4)
+  min_quartile: "Q2"
+  
+  # 最小发表年份
+  min_year: 2020
+  
+  # 最小引用数
+  min_citations: 0
+  
+  # 是否要求同行评审
+  require_peer_reviewed: true
+
+# 出版商配置
+publishers:
+  # 黑名单出版商 (按用户要求包含MDPI)
+  blacklist:
+    - "MDPI"
+    - "Hindawi" 
+    - "Scientific Research Publishing"
+    - "OMICS Publishing Group"
+    - "Bentham Science"
+    - "InTech"
+    - "WASET"
+    - "Science Publishing Group"
+    - "Academic Journals"
+    - "Herald Scholarly Open Access"
+    
+  # 可疑出版商 (降低权重但不完全过滤)
+  suspicious:
+    - "Frontiers Media"
+    - "BioMed Central" # 部分期刊质量参差不齐
+    - "Public Library of Science" # PLOS系列需要具体评估
+    
+  # 高质量出版商白名单
+  whitelist:
+    - "IEEE"
+    - "Elsevier"
+    - "Springer Nature"
+    - "Wiley"
+    - "American Chemical Society"
+    - "Royal Society of Chemistry"
+    - "American Physical Society"
+    - "Institute of Physics"
+    - "Cambridge University Press"
+    - "Oxford University Press"
+    - "SAGE Publications"
+    - "Taylor & Francis"
+
+# PHM特定配置
+phm_specific:
+  # PHM相关性最低分数 (0.0-1.0)
+  min_relevance_score: 0.6
+  
+  # PHM核心期刊 (高优先级)
+  top_tier_venues:
+    - "Mechanical Systems and Signal Processing"
+    - "IEEE Transactions on Industrial Electronics" 
+    - "Reliability Engineering & System Safety"
+    - "Expert Systems with Applications"
+    - "Applied Soft Computing"
+    - "Knowledge-Based Systems"
+    - "IEEE Transactions on Reliability"
+    - "ISA Transactions"
+    - "Measurement"
+    - "Neurocomputing"
+    
+  # PHM相关会议
+  conferences:
+    - "Annual Conference of PHM Society"
+    - "IEEE Conference on Prognostics and Health Management"
+    - "International Conference on Condition Monitoring"
+    - "European Conference of PHM Society"
+    
+  # PHM关键词权重
+  keyword_weights:
+    # 核心概念 (高权重)
+    prognostics: 1.0
+    "health management": 1.0
+    "fault diagnosis": 0.9
+    "predictive maintenance": 0.9
+    "remaining useful life": 1.0
+    "condition monitoring": 0.8
+    
+    # 技术方法 (中等权重)  
+    "deep learning": 0.7
+    "machine learning": 0.6
+    "signal processing": 0.6
+    "anomaly detection": 0.7
+    
+    # 应用领域 (中等权重)
+    bearing: 0.8
+    gear: 0.7
+    motor: 0.7
+    turbine: 0.7
+    aerospace: 0.6
+    automotive: 0.6
+
+# 质量分级配置
+quality_tiers:
+  # 顶级论文标准
+  top_tier:
+    min_impact_factor: 8.0
+    min_citations: 100
+    max_quartile: "Q1"
+    required_publishers: ["IEEE", "Elsevier", "Springer Nature"]
+    
+  # 优秀论文标准  
+  excellent:
+    min_impact_factor: 5.0
+    min_citations: 50
+    max_quartile: "Q1"
+    
+  # 良好论文标准
+  good:
+    min_impact_factor: 3.0
+    min_citations: 10
+    max_quartile: "Q2"
+    
+  # 可接受论文标准
+  acceptable:
+    min_impact_factor: 1.0
+    min_citations: 1
+    max_quartile: "Q3"
+
+# 过滤严格程度配置
+strictness_levels:
+  # 严格模式 (学术研究用)
+  strict:
+    impact_factor_threshold: 8.0
+    min_quartile: "Q1"
+    min_citations: 50
+    exclude_preprints: true
+    exclude_conferences: false
+    phm_relevance_threshold: 0.8
+    
+  # 标准模式 (一般研究用) 
+  standard:
+    impact_factor_threshold: 5.0
+    min_quartile: "Q2" 
+    min_citations: 10
+    exclude_preprints: false
+    exclude_conferences: false
+    phm_relevance_threshold: 0.6
+    
+  # 宽松模式 (广泛收集用)
+  relaxed:
+    impact_factor_threshold: 2.0
+    min_quartile: "Q3"
+    min_citations: 0
+    exclude_preprints: false
+    exclude_conferences: false
+    phm_relevance_threshold: 0.4
+    
+  # 探索模式 (新兴研究用)
+  exploratory:
+    impact_factor_threshold: 0.0
+    min_quartile: "Q4"
+    min_citations: 0
+    exclude_preprints: false
+    exclude_conferences: false
+    phm_relevance_threshold: 0.3
+
+# 特殊处理规则
+special_rules:
+  # 新论文处理 (发表时间<1年)
+  recent_papers:
+    min_citations_override: 0  # 新论文引用数要求降低
+    impact_factor_bonus: 0.5   # 新论文IF奖励分数
+    
+  # 综述论文处理
+  review_papers:
+    citation_multiplier: 1.5   # 综述论文引用数加权
+    impact_factor_bonus: 1.0   # 综述论文IF奖励
+    
+  # 开源论文奖励
+  open_access:
+    quality_bonus: 0.1         # 开放获取论文质量奖励
+    
+  # 代码开源奖励  
+  code_available:
+    quality_bonus: 0.15        # 代码开源论文质量奖励
+    
+  # 数据集开源奖励
+  dataset_available:
+    quality_bonus: 0.1         # 数据集开源论文质量奖励
+
+# 输出格式配置
+output_settings:
+  # 是否显示过滤原因
+  show_filter_reasons: true
+  
+  # 是否显示质量得分详情
+  show_quality_breakdown: true
+  
+  # 是否生成统计报告
+  generate_statistics: true
+  
+  # 是否提供改进建议
+  provide_suggestions: true
+  
+  # 最大输出论文数量
+  max_papers_output: 100
+
+# 自定义规则示例
+custom_rules:
+  # 可以添加用户自定义的过滤规则
+  # 例如：特定作者、特定机构、特定关键词组合等
+  examples:
+    - name: "高影响力作者"
+      description: "来自知名PHM专家的论文"
+      condition:
+        authors: ["Zhang Wei", "Liu Ming", "Wang Lei"]
+        quality_bonus: 0.2
+        
+    - name: "顶级机构"  
+      description: "来自985/211或国外顶级大学的论文"
+      condition:
+        affiliations: ["MIT", "Stanford", "Tsinghua", "PKU"]
+        quality_bonus: 0.15
+
+# 版本信息
+version: "1.0"
+last_updated: "2025-08-23"
+description: "APPA系统专用的论文质量过滤配置，支持多维度质量评估和PHM领域特定过滤"
