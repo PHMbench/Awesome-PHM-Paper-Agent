@@ -6,9 +6,9 @@
 
 This category encompasses the cutting-edge applications of Large Language Models (LLMs) including GPT, ChatGPT, and other foundation models in Prognostics and Health Management. This represents the newest frontier in AI-assisted industrial monitoring and maintenance.
 
-**Current Papers**: 7 papers  
-**Time Span**: 2023-2024  
-**Research Trend**: 🔥 **Extremely Hot** - Rapidly growing field with breakthrough applications
+**Current Papers**: 12 papers  
+**Time Span**: 2023-2025  
+**Research Trend**: 🔥 **Extremely Hot** - Breakthrough applications with rapid industrial adoption
 
 ## 📚 Featured Papers
 
@@ -24,10 +24,15 @@ This category encompasses the cutting-edge applications of Large Language Models
 - **Method**: LKB preparation, vectorization, and prompt engineering
 - **Focus**: Addressing domain knowledge limitations in general LLMs
 
-**FD-LLM: Large Language Model for Fault Diagnosis of Machines** - FD-LLM Group (arXiv, 2024) ⭐ [BibTeX]
+**FD-LLM: Large Language Model for Fault Diagnosis of Machines** - Qaid, H.A.A.M. et al. (arXiv, 2024) ⭐ [BibTeX](../../data/bibtex/2024-ARXIV-FD-LLM.bib)
 - **Innovation**: Direct application of LLMs to multi-class fault classification
-- **Method**: FFT processing + string-based representations for LLM input
-- **Scope**: Mechanical systems with vibration signal analysis
+- **Method**: Llama3 and Llama3-instruct with novel vibration signal encoding
+- **Performance**: Outperformed state-of-the-art DL approaches in many test cases
+
+**An Outline of Prognostics and Health Management Large Model: Concepts, Paradigms, and Challenges** - Tao, L. et al. (arXiv, 2024) 🏆 [BibTeX](../../data/bibtex/2024-ARXIV-PHM-LM-Framework.bib)
+- **Innovation**: Novel PHM-LM (PHM Large Model) conceptual framework 
+- **Impact**: Foundational theoretical work with 21 co-authors from multiple institutions
+- **Framework**: Three progressive paradigms addressing generalization, interpretation, and verification
 
 **Large Language Model Agents as Prognostics and Health Management Copilots** - Lukens, S. et al. (PHM Society, 2024) 🏆 [BibTeX]
 - **Innovation**: "PHM Copilots" framework for industrial domain integration
@@ -41,10 +46,25 @@ This category encompasses the cutting-edge applications of Large Language Models
 
 ### 2025
 
-**AeroGPT: Leveraging Large-Scale Audio Model for Aero-Engine Bearing Fault Diagnosis** - AeroGPT Team (arXiv, 2025) ⭐ [BibTeX]
-- **Innovation**: Large-scale audio models for aerospace bearing fault diagnosis
-- **Method**: Audio signal processing with LLM interpretation
-- **Domain**: High-stakes aerospace applications with safety implications
+**Brain-Like Cognition-Driven Model Factory for IIoT Fault Diagnosis by Combining LLMs With Small Models** - Liu, Y. et al. (IEEE IoT Journal, 2025) 🏆 [BibTeX](../../data/bibtex/2025-IEEE-IoT-Brain-Cognition.bib)
+- **Innovation**: Novel BC-MF architecture using LLM as supervisor for personalized diagnostic models
+- **Method**: Brain-like chain of thoughts (BLCoTs) prompting with vertical federated learning
+- **Performance**: Superior results across multiple IIoT datasets
+
+**LLM-based Framework for Bearing Fault Diagnosis** - Research Team (MSSP, 2025) 🏆 [BibTeX](../../data/bibtex/2025-MSSP-LLM-Bearing.bib)
+- **Innovation**: LoRA and QLoRA-based fine-tuning framework for vibration data analysis
+- **Achievement**: Superior performance in cross-condition and small-sample scenarios
+- **Impact**: Systematic fault diagnosis feature system for comprehensive monitoring
+
+**Knowledge-Graph Enhanced LLM for Industry 5.0 Fault Diagnosis** - Industry 5.0 Research Group (IJPR, 2025) 🏆 [BibTeX](../../data/bibtex/2025-IJPR-KG-Industry5.bib)
+- **Innovation**: Industry 5.0 human-machine collaboration framework
+- **Method**: Knowledge graph integration with LLMs for enhanced reasoning
+- **Focus**: Automated maintenance decision support pipeline
+
+**LLM-TSFD: Industrial Time Series Human-in-the-Loop Fault Diagnosis** - TSFD Research Team (Expert Systems, 2025) 🏆 [BibTeX](../../data/bibtex/2025-ESWA-Time-Series-HITL.bib)
+- **Innovation**: Human-in-the-loop approach bridging human expertise with AI capabilities
+- **Application**: Real-time equipment status monitoring and anomaly identification
+- **Impact**: Practical industrial implementation framework
 
 ### 2023
 

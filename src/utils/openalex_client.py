@@ -13,18 +13,15 @@ import os
 import re
 import json
 import time
-import logging
 from typing import Dict, List, Any, Optional, Tuple, Union
 from datetime import datetime
 from urllib.parse import quote
-import requests
-from tenacity import retry, stop_after_attempt, wait_exponential
 
-from .logging_config import get_logger
+from .base_api_client import BaseAPIClient, APIClientError
 from .paper_quality_filter import PaperQualityFilter
 
 
-class OpenAlexClient:
+class OpenAlexClient(BaseAPIClient):
     """
     OpenAlex API client with PHM paper discovery capabilities.
     
@@ -37,53 +34,25 @@ class OpenAlexClient:
     """
     
     def __init__(self, config: Optional[Dict[str, Any]] = None):
-        self.config = config or {}
-        self.logger = get_logger(__name__)
+        super().__init__(config)
         
-        # API Configuration
+        # OpenAlex-specific configuration
         self.base_url = "https://api.openalex.org"
         self.email = os.environ.get('OPENALEX_EMAIL', '')
         self.rate_limit = 10  # requests per second (polite pool)
         
-        # Request headers
-        self.headers = {
-            'User-Agent': f'APPA/1.0 (Awesome-PHM-Paper-Agent; {self.email})',
-            'Accept': 'application/json'
-        }
+        # Update session headers for OpenAlex
+        self.session.headers.update({
+            'User-Agent': f'APPA/1.0 (Awesome-PHM-Paper-Agent; {self.email})'
+        })
         
         # Quality filter
         self.quality_filter = PaperQualityFilter(config)
         
-        # PHM-specific keywords for relevance scoring
-        self.phm_keywords = {
-            'core': [
-                'prognostics', 'health management', 'PHM', 'condition monitoring',
-                'predictive maintenance', 'fault diagnosis', 'anomaly detection'
-            ],
-            'technical': [
-                'remaining useful life', 'RUL', 'degradation modeling',
-                'health assessment', 'failure prediction', 'system reliability',
-                'maintenance optimization', 'sensor fusion', 'digital twin'
-            ],
-            'domains': [
-                'bearing', 'gearbox', 'turbine', 'motor', 'pump', 'valve',
-                'aircraft', 'automotive', 'industrial', 'manufacturing'
-            ]
-        }
-        
-        # Excluded publishers (MDPI, predatory journals)
-        self.excluded_publishers = {
-            'mdpi', 'mdpi ag', 'multidisciplinary digital publishing institute',
-            'scirp', 'scientific research publishing', 'hindawi',
-            'bentham', 'bentham science', 'omics', 'omics international'
-        }
-        
         self.logger.info(f"OpenAlex client initialized {'with email' if self.email else 'without email'}")
-        
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
-    def _make_request(self, endpoint: str, params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Make rate-limited request to OpenAlex API."""
-        
+    
+    def _make_openalex_request(self, endpoint: str, params: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """Make request to OpenAlex API using base class method."""
         # Add polite pool email if available
         if self.email:
             params['mailto'] = self.email
@@ -91,15 +60,8 @@ class OpenAlexClient:
         url = f"{self.base_url}/{endpoint.lstrip('/')}"
         
         try:
-            # Rate limiting
-            time.sleep(1.0 / self.rate_limit)
-            
-            response = requests.get(url, headers=self.headers, params=params, timeout=30)
-            response.raise_for_status()
-            
-            return response.json()
-            
-        except requests.exceptions.RequestException as e:
+            return self._make_request(url, params=params)
+        except APIClientError as e:
             self.logger.error(f"OpenAlex API request failed: {e}")
             return None
     
@@ -167,7 +129,7 @@ class OpenAlexClient:
                     params['filter'] = ','.join(filter_parts)
         
         # Make request
-        response_data = self._make_request('works', params)
+        response_data = self._make_openalex_request('works', params)
         if not response_data:
             return []
         
@@ -175,7 +137,7 @@ class OpenAlexClient:
         for work in response_data.get('results', []):
             try:
                 paper = self._convert_work_to_paper(work)
-                if paper and self._is_phm_relevant(paper):
+                if paper and self.is_phm_relevant(paper):
                     papers.append(paper)
                     
             except Exception as e:
@@ -183,7 +145,7 @@ class OpenAlexClient:
                 continue
         
         # Apply quality filters
-        filtered_papers = self._apply_quality_filters(papers)
+        filtered_papers = self.apply_quality_filters(papers)
         
         self.logger.info(f"Found {len(filtered_papers)} PHM-relevant papers from OpenAlex")
         return filtered_papers[:max_results]
@@ -232,14 +194,14 @@ class OpenAlexClient:
             paper['keywords'] = keywords[:10]  # Limit to top 10
             
             # PHM relevance scoring
-            paper['phm_relevance_score'] = self._calculate_phm_relevance(paper)
+            paper['phm_relevance_score'] = self.calculate_phm_relevance(paper)
             
             # Quality indicators
             paper['quality_indicators'] = {
                 'citations': paper['cited_by_count'],
                 'open_access': paper['is_open_access'],
                 'venue_prestige': 'high' if paper.get('is_core') else 'medium',
-                'data_completeness': self._assess_data_completeness(paper)
+                'data_completeness': self.assess_data_completeness(paper)
             }
             
             return paper
@@ -282,122 +244,7 @@ class OpenAlexClient:
             self.logger.warning(f"Failed to reconstruct abstract: {e}")
             return ''
     
-    def _calculate_phm_relevance(self, paper: Dict[str, Any]) -> float:
-        """Calculate PHM relevance score based on content analysis."""
-        
-        # Combine text fields for analysis
-        text_fields = [
-            paper.get('title', ''),
-            paper.get('abstract', ''),
-            ' '.join(paper.get('keywords', []))
-        ]
-        combined_text = ' '.join(text_fields).lower()
-        
-        if not combined_text.strip():
-            return 0.0
-        
-        # Score based on keyword presence
-        scores = {
-            'core': 0.0,
-            'technical': 0.0,
-            'domains': 0.0
-        }
-        
-        for category, keywords in self.phm_keywords.items():
-            matches = sum(1 for kw in keywords if kw.lower() in combined_text)
-            total_keywords = len(keywords)
-            scores[category] = matches / total_keywords if total_keywords > 0 else 0.0
-        
-        # Weighted combination
-        relevance_score = (
-            scores['core'] * 0.5 +      # Core PHM concepts most important
-            scores['technical'] * 0.3 +  # Technical terms moderate weight
-            scores['domains'] * 0.2      # Application domains lower weight
-        )
-        
-        # Boost for high-citation papers in relevant domains
-        if paper.get('cited_by_count', 0) > 20 and relevance_score > 0.3:
-            relevance_score = min(1.0, relevance_score * 1.2)
-        
-        return min(1.0, relevance_score)
     
-    def _is_phm_relevant(self, paper: Dict[str, Any]) -> bool:
-        """Check if paper meets minimum PHM relevance threshold."""
-        
-        relevance_score = paper.get('phm_relevance_score', 0.0)
-        min_threshold = 0.2  # Adjust based on needs
-        
-        # Additional checks
-        publisher = paper.get('publisher', '').lower()
-        venue = paper.get('venue', '').lower()
-        
-        # Exclude predatory publishers
-        if any(excluded in publisher for excluded in self.excluded_publishers):
-            self.logger.debug(f"Excluded paper from publisher: {publisher}")
-            return False
-        
-        # Exclude obviously irrelevant venues
-        irrelevant_venues = ['art', 'literature', 'history', 'philosophy', 'religion']
-        if any(irrelevant in venue for irrelevant in irrelevant_venues):
-            return False
-        
-        return relevance_score >= min_threshold
-    
-    def _apply_quality_filters(self, papers: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Apply quality filters to remove low-quality papers."""
-        
-        filtered_papers = []
-        
-        for paper in papers:
-            # Basic quality checks
-            if not paper.get('title') or len(paper['title']) < 10:
-                continue
-            
-            if not paper.get('authors'):
-                continue
-            
-            # Year filter
-            year = paper.get('year')
-            if year and (year < 2015 or year > datetime.now().year):
-                continue
-            
-            # Citation filter (adjust threshold)
-            citations = paper.get('cited_by_count', 0)
-            if year and datetime.now().year - year > 2 and citations < 5:
-                continue  # Old papers should have some citations
-            
-            filtered_papers.append(paper)
-        
-        return filtered_papers
-    
-    def _assess_data_completeness(self, paper: Dict[str, Any]) -> float:
-        """Assess how complete the paper metadata is."""
-        
-        completeness_score = 0.0
-        total_fields = 0
-        
-        # Check important fields
-        important_fields = [
-            ('title', 0.2),
-            ('authors', 0.2),
-            ('abstract', 0.2),
-            ('doi', 0.1),
-            ('venue', 0.1),
-            ('year', 0.1),
-            ('keywords', 0.1)
-        ]
-        
-        for field, weight in important_fields:
-            total_fields += weight
-            if paper.get(field):
-                if isinstance(paper[field], str) and paper[field].strip():
-                    completeness_score += weight
-                elif isinstance(paper[field], list) and paper[field]:
-                    completeness_score += weight
-                elif isinstance(paper[field], int) and paper[field] > 0:
-                    completeness_score += weight
-        
-        return completeness_score / total_fields if total_fields > 0 else 0.0
     
     def search_by_venue(self, 
                        venue_name: str,
@@ -414,7 +261,7 @@ class OpenAlexClient:
         if query:
             params['search'] = query
         
-        response_data = self._make_request('works', params)
+        response_data = self._make_openalex_request('works', params)
         if not response_data:
             return []
         
@@ -430,7 +277,7 @@ class OpenAlexClient:
         """Get detailed information for a specific paper by OpenAlex ID."""
         
         endpoint = f'works/{openalex_id}'
-        response_data = self._make_request(endpoint, {})
+        response_data = self._make_openalex_request(endpoint, {})
         
         if response_data:
             return self._convert_work_to_paper(response_data)

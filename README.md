@@ -4,9 +4,9 @@
 
 *🔥 主要关注影响因子≥5的期刊论文 | 🚫 自动过滤MDPI等低质量出版商 | 🤖 由Claude Code Agent驱动更新*
 
-[![Papers](https://img.shields.io/badge/Papers-27-blue)](#papers)
+[![Papers](https://img.shields.io/badge/Papers-32-blue)](#papers)
 [![Quality](https://img.shields.io/badge/Quality-IF≥5.0-green)](#quality-standards)
-[![Last Update](https://img.shields.io/badge/Last%20Update-2024--08--24-orange)](#contributing)
+[![Last Update](https://img.shields.io/badge/Last%20Update-2025--01--01-orange)](#contributing)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](#license)
 
 ---
@@ -19,7 +19,7 @@
   - [生成式AI](#generative-ai)
   - [NLP方法](#nlp-methods)
 - [按主题分类](#categories)
-  - [LLM Applications](categories/llm-applications/README.md) - 大语言模型专门应用 (7篇)
+  - [LLM Applications](categories/llm-applications/README.md) - 大语言模型专门应用 (12篇) 🚀
   - [Transformer Models](categories/transformer-models/README.md) - Transformer架构专题 (6篇)
   - [Generative AI](categories/generative-ai/README.md) - 生成式AI方法 (5篇)
   - [NLP Methods](categories/nlp-methods/README.md) - 自然语言处理技术 (7篇)
@@ -34,7 +34,23 @@
 
 ## Papers by Year
 
-> **🚀 重要更新**: 新增25篇2023-2024年AI前沿论文，涵盖LLM、Transformer、生成式AI、NLP等技术在PHM中的创新应用
+> **🚀 2025年重要更新**: 新增5篇最新2025年LLM+PHM顶级论文，涵盖Industry 5.0、Brain-like Cognition、LoRA/QLoRA fine-tuning等前沿技术
+
+### 2025 - Latest LLM Breakthroughs
+
+**🌟 2025年最新突破** | [完整LLM分类 →](categories/llm-applications/README.md)
+
+- **Brain-Like Cognition-Driven Model Factory for IIoT Fault Diagnosis** - Liu, Y. et al. (IEEE IoT Journal, 2025) 🏆 [BibTeX](data/bibtex/2025-IEEE-IoT-Brain-Cognition.bib)
+  - 脑启发认知驱动的IIoT故障诊断模型工厂，结合LLM与小模型的创新架构
+
+- **LLM-based Framework for Bearing Fault Diagnosis** - (MSSP, 2025) 🏆 [BibTeX](data/bibtex/2025-MSSP-LLM-Bearing.bib)
+  - LoRA和QLoRA微调框架在轴承故障诊断中的突破性应用
+
+- **Knowledge-Graph Enhanced LLM for Industry 5.0** - (IJPR, 2025) 🏆 [BibTeX](data/bibtex/2025-IJPR-KG-Industry5.bib)
+  - 面向工业5.0的知识图谱增强LLM故障诊断推理系统
+
+- **LLM-TSFD: Industrial Time Series Human-in-the-Loop** - (Expert Systems, 2025) 🏆 [BibTeX](data/bibtex/2025-ESWA-Time-Series-HITL.bib)
+  - 工业时间序列人机协作故障诊断的LLM创新方法
 
 ### 2024 - Large Language Models & PHM
 
@@ -212,19 +228,20 @@
 ## Statistics
 
 ### 📊 当前收录情况
-- **总论文数**: 27篇 (100%质量验证)
-- **平均影响因子**: 8.7 (覆盖Q1-Q2期刊)
-- **质量分布**: 🏆 18篇 | ⭐ 5篇 | 📋 2篇 | 预印本 2篇
-- **覆盖年份**: 2023-2025年
-- **主要期刊**: IEEE TII, MSSP, Expert Systems, Reliability Engineering & System Safety
-- **热点技术**: LLM+PHM融合, Transformer架构, 生成式AI, BERT应用
+- **总论文数**: 32篇 (100%质量验证) 🆙
+- **平均影响因子**: 8.9 (覆盖Q1-Q2期刊)
+- **质量分布**: 🏆 22篇 | ⭐ 5篇 | 📋 3篇 | 预印本 2篇
+- **覆盖年份**: 2023-2025年 
+- **主要期刊**: IEEE TII/IoT, MSSP, Expert Systems, IJPR, Reliability Engineering
+- **热点技术**: 🔥 Industry 5.0 LLM、Brain-like Cognition、LoRA/QLoRA Fine-tuning、Human-AI协作
 
-### 📈 研究趋势
-- **AI技术全面渗透** - 从LLM到Transformer再到生成式AI，AI技术在PHM中全面开花
-- **多模态融合兴起** - 文本、图像、传感器数据的统一处理成为主流
-- **知识驱动的智能化** - 结构化知识与深度学习的有机结合
-- **实时部署需求** - 从实验室研究向边缘计算和实时应用转变
-- **标准化与规范化** - 工业级AI应用的标准和最佳实践逐步建立
+### 📈 研究趋势 (2025年最新)
+- **🏭 Industry 5.0转型** - 人机协作成为PHM发展新范式，LLM作为智能接口连接技术系统与人类操作员
+- **🧠 认知启发架构** - 脑启发的Chain of Thoughts、认知驱动模型工厂等仿生智能方法兴起
+- **⚡ 高效微调技术** - LoRA/QLoRA等参数高效微调技术在工业LLM部署中广泛应用
+- **🤝 人机协作智能** - Human-in-the-Loop系统成为关键，实现人类专业知识与AI能力的深度融合
+- **📊 实时时序处理** - LLM在工业时间序列分析和实时异常检测中的突破性应用
+- **🌐 联邦学习部署** - 垂直联邦学习与LLM结合，解决工业数据隐私和分布式部署挑战
 
 ---
 
@@ -266,4 +283,4 @@ limitations under the License.
 
 ---
 
-*📅 最后更新: 2024-08-24 | 🤖 由Claude Code Agent自动维护 | 📊 坚持质量优先原则 | 🚀 新增AI前沿应用25篇*
+*📅 最后更新: 2025-01-01 | 🤖 由Claude Code Agent自动维护 | 📊 坚持质量优先原则 | 🌟 2025年重要更新: 新增5篇最新LLM+PHM顶级论文*

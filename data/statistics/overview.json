@@ -1,90 +1,91 @@
 {
-  "total_papers": 27,
+  "total_papers": 32,
   "by_year": {
     "2023": 10,
     "2024": 16,
-    "2025": 1
+    "2025": 6
   },
   "by_category": {
-    "llm-applications": 7,
+    "llm-applications": 12,
     "transformer-models": 6,
     "generative-ai": 5,
     "nlp-methods": 7,
-    "knowledge-graph": 1,
-    "fault-diagnosis": 15,
-    "predictive-maintenance": 18
+    "knowledge-graph": 2,
+    "fault-diagnosis": 20,
+    "predictive-maintenance": 22
   },
   "by_quality_tier": {
-    "top_tier": 18,
+    "top_tier": 22,
     "excellent": 5,
-    "good": 2,
+    "good": 3,
     "under_review": 2
   },
   "by_venue_type": {
-    "journal": 20,
+    "journal": 24,
     "conference": 4,
-    "preprint": 3
+    "preprint": 4
   },
   "by_publisher": {
-    "IEEE": 8,
-    "Elsevier": 12,
-    "arXiv": 3,
-    "Springer": 3,
+    "IEEE": 10,
+    "Elsevier": 16,
+    "arXiv": 4,
+    "Springer": 1,
     "PHM Society": 1
   },
   "quality_metrics": {
-    "average_impact_factor": 8.7,
-    "median_citations": 15,
-    "peer_reviewed_percentage": 88.9,
-    "open_access_percentage": 45.0
+    "average_impact_factor": 8.9,
+    "median_citations": 12,
+    "peer_reviewed_percentage": 87.5,
+    "open_access_percentage": 43.75
   },
   "research_trends": {
     "hot_topics": [
       "Large Language Models",
-      "Transformer Architectures",
-      "Generative AI",
-      "BERT Applications",
+      "Industry 5.0 Integration",
+      "Human-Machine Collaboration",
+      "Brain-Like Cognition",
+      "Foundation Model Fine-tuning",
       "Knowledge Graph Fusion",
-      "Industrial Applications",
-      "Multimodal AI",
-      "Foundation Models"
+      "Time Series LLM Applications",
+      "Federated PHM Learning",
+      "LoRA/QLoRA Adaptation"
     ],
     "emerging_methods": [
-      "Prefix Tuning",
-      "Local Knowledge Base",
-      "Retrieval Augmented Generation",
-      "Attention Mechanisms",
-      "Bayesian Transformers",
-      "Diffusion Models",
-      "Cross-attention Fusion",
-      "Domain Adaptation"
+      "LoRA and QLoRA Fine-tuning",
+      "Brain-Like Chain of Thoughts (BLCoTs)",
+      "Human-in-the-Loop LLM Systems",
+      "PHM-LM Framework",
+      "Vertical Federated Learning with LLMs",
+      "Multi-modal LLM Integration",
+      "Real-time LLM Deployment",
+      "Cross-condition Adaptation"
     ],
     "application_domains": [
+      "Industrial IoT (IIoT)",
+      "Industry 5.0 Manufacturing",
+      "Bearing Fault Diagnosis",
+      "Time Series Monitoring",
       "Aviation Assembly",
-      "Industrial Systems",
-      "General PHM",
-      "Manufacturing Quality Control",
-      "Energy Systems",
-      "Transportation",
-      "Aerospace",
-      "Maintenance Documentation"
+      "Complex Equipment Monitoring",
+      "Real-time Anomaly Detection",
+      "Human-AI Collaborative Maintenance"
     ]
   },
   "data_sources": {
-    "ieee_xplore": 8,
-    "arxiv": 3,
-    "sciencedirect": 12,
-    "springer": 3,
+    "ieee_xplore": 10,
+    "arxiv": 4,
+    "sciencedirect": 16,
+    "springer": 1,
     "phm_society": 1
   },
   "phm_relevance": {
-    "high_relevance": 25,
-    "medium_relevance": 2,
+    "high_relevance": 29,
+    "medium_relevance": 3,
     "low_relevance": 0,
-    "average_score": 0.92
+    "average_score": 0.93
   },
-  "last_updated": "2024-08-24T12:00:00Z",
-  "generated_by": "APPA UpdateManager v2.0",
+  "last_updated": "2025-01-01T12:00:00Z",
+  "generated_by": "APPA UpdateManager v2.1",
   "notes": [
     "重构为Awesome格式，突出质量优先",
     "集成user confirmation机制",
@@ -96,6 +97,9 @@
     "添加4个新类别：LLM应用、Transformer模型、生成式AI、NLP方法",
     "收录25篇2023-2024年LLM在PHM领域的前沿论文",
     "建立完整的AI驱动PHM研究分类体系",
-    "更新统计数据反映AI技术在PHM中的快速发展"
+    "🚀 2025年重要更新：新增5篇最新LLM+PHM顶级论文",
+    "涵盖Industry 5.0、Brain-like Cognition、LoRA/QLoRA fine-tuning等前沿技术",
+    "更新BibTeX信息提高引用准确性",
+    "反映人机协作和实时LLM部署的最新趋势"
   ]
 }
