@@ -1,0 +1,65 @@
+{
+  "id": "2024-ARXIV-Wang-ChatGPT-LKB-PHM",
+  "title": "Empowering ChatGPT-Like Large-Scale Language Models with Local Knowledge Base for Industrial Prognostics and Health Management",
+  "authors": [
+    "Huan Wang",
+    "Yan-Fu Li",
+    "Min Xie"
+  ],
+  "year": 2024,
+  "venue": "arXiv preprint",
+  "venue_type": "preprint",
+  "doi": "",
+  "arxiv_id": "2312.14945",
+  "last_updated": "2024-11-27",
+  "abstract": "预测性健康管理(PHM)对工业运营和维护至关重要，专注于预测、诊断和管理工业系统的健康状态。ChatGPT类大语言模型(LLM)的出现开始引领AI领域的新一轮创新浪潮，有望改变工业PHM的应用范式并推动PHM走向智能化。尽管ChatGPT类LLM拥有丰富的知识储备和强大的语言理解生成能力，但它们缺乏特定领域的专业知识，这显著限制了它们在PHM应用中的实用性。本研究通过整合本地知识库(LKB)来解决这一局限，包括LKB准备、LKB向量化和提示工程等关键技术。",
+  "keywords": [
+    "ChatGPT",
+    "large language model",
+    "prognostics and health management", 
+    "local knowledge base",
+    "industrial applications"
+  ],
+  "quality_indicators": {
+    "impact_factor": null,
+    "quartile": null,
+    "citations": 0,
+    "peer_reviewed": false,
+    "publisher": "arXiv",
+    "open_access": true
+  },
+  "quality_tier": "under_review",
+  "phm_relevance_score": 0.92,
+  "phm_relevance_explanation": "高度相关：专门针对工业PHM应用的ChatGPT类大语言模型增强方法，解决领域知识缺乏问题",
+  "methodology": {
+    "primary_method": "machine_learning",
+    "specific_techniques": [
+      "Large Language Model",
+      "Local Knowledge Base",
+      "Vector Database",
+      "Prompt Engineering",
+      "Retrieval Augmented Generation"
+    ],
+    "innovation": "首次将本地知识库集成到ChatGPT类模型用于工业PHM"
+  },
+  "application_domain": {
+    "industry": "industrial",
+    "equipment": "general_industrial_systems",
+    "fault_types": [
+      "general_faults"
+    ],
+    "monitoring_objective": "prognostics_and_health_management"
+  },
+  "urls": {
+    "arxiv_url": "https://arxiv.org/abs/2312.14945",
+    "pdf_url": "https://arxiv.org/pdf/2312.14945.pdf"
+  },
+  "affiliations": [
+    "不详"
+  ],
+  "source_info": {
+    "database": "arXiv",
+    "added_date": "2025-08-23",
+    "verified": true
+  }
+}

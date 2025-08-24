@@ -1,0 +1,68 @@
+{
+  "id": "2024-TII-Liu-KG-LLM-Aviation",
+  "title": "Joint Knowledge Graph and Large Language Model for Fault Diagnosis and Its Application in Aviation Assembly",
+  "authors": [
+    "Peifeng Liu",
+    "Lu Qian", 
+    "Xingwei Zhao",
+    "Bo Tao"
+  ],
+  "year": 2024,
+  "venue": "IEEE Transactions on Industrial Informatics",
+  "venue_type": "journal",
+  "doi": "10.1109/TII.2024.3366977",
+  "volume": "20",
+  "number": "6",
+  "pages": "8160-8169",
+  "abstract": "本研究提出了一种将航空装配知识图谱(KG)嵌入到大语言模型(LLM)中的新颖方法，用于复杂工业装配环境中的故障定位。该模型利用知识图谱中的图结构化大数据对LLM进行前缀调优，实现在线重配置的同时避免大量计算负载。该方法的核心创新包括：使用图结构化数据进行LLM的前缀调优、实现模型的在线重配置而无需大量计算负载、加强特定领域知识用于故障定位，以及在航空装配场景中实现故障诊断和故障排除的98.5%准确率。",
+  "keywords": [
+    "knowledge graph",
+    "large language model",
+    "fault diagnosis",
+    "aviation assembly",
+    "prefix tuning"
+  ],
+  "quality_indicators": {
+    "impact_factor": 11.7,
+    "quartile": "Q1",
+    "citations": 0,
+    "peer_reviewed": true,
+    "publisher": "IEEE",
+    "open_access": false
+  },
+  "quality_tier": "top_tier",
+  "phm_relevance_score": 0.95,
+  "phm_relevance_explanation": "高度相关：结合知识图谱和大语言模型进行故障诊断，直接应用于航空装配场景，准确率达98.5%",
+  "methodology": {
+    "primary_method": "hybrid",
+    "specific_techniques": [
+      "Knowledge Graph",
+      "Large Language Model",
+      "Prefix Tuning",
+      "Graph Neural Network"
+    ],
+    "innovation": "首次将知识图谱嵌入到大语言模型中用于工业故障诊断"
+  },
+  "application_domain": {
+    "industry": "aerospace",
+    "equipment": "assembly_systems",
+    "fault_types": [
+      "assembly_defects",
+      "component_failures"
+    ],
+    "monitoring_objective": "fault_diagnosis"
+  },
+  "urls": {
+    "doi_url": "https://doi.org/10.1109/TII.2024.3366977",
+    "ieee_url": "https://ieeexplore.ieee.org/document/10443946"
+  },
+  "affiliations": [
+    "华中科技大学",
+    "武汉理工大学"
+  ],
+  "source_info": {
+    "database": "IEEE Xplore",
+    "added_date": "2025-08-23",
+    "verified": true
+  }
+}

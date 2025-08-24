@@ -85,7 +85,18 @@ api_configuration:
     openalex: 10          # OpenAlex API rate limit
     semantic_scholar: 1   # Semantic Scholar API rate limit
     crossref: 5          # Crossref API rate limit
+    pubmed: 3            # PubMed/Europe PMC API rate limit
+    lens: 2              # Lens.org API rate limit
     arxiv: 3             # arXiv API rate limit
+    elsevier: 2          # Elsevier ScienceDirect API rate limit
+  
+  # API priorities (higher = preferred, 1-5 scale)
+  priorities:
+    openalex: 5          # Free, comprehensive, good metadata
+    crossref: 4          # Free, DOI authority, venue data
+    semantic_scholar: 3  # Good AI features, requires key
+    pubmed: 2            # Biomedical focus
+    lens: 1              # Comprehensive but requires key
   
   # Request timeout in seconds
   timeout_seconds: 30
@@ -96,6 +107,116 @@ api_configuration:
   
   # User agent string for API requests
   user_agent: "APPA/1.0 (Awesome-PHM-Paper-Agent; Academic Research Tool)"
+
+# Data Sources Configuration
+data_sources:
+  # OpenAlex API (Free, no authentication required)
+  openalex:
+    enabled: true   # Always enabled, no API key required
+    base_url: "https://api.openalex.org"
+    email: ""       # Optional email for "polite pool" access (recommended)
+    
+    settings:
+      # Maximum results per request (OpenAlex limit: 200)
+      max_results_per_request: 200
+      # Exclude MDPI and predatory publishers
+      exclude_publishers: ["MDPI", "SCIRP", "Hindawi", "Bentham", "OMICS"]
+      # PHM relevance threshold
+      min_phm_relevance: 0.2
+      
+  # Crossref API (Free, no authentication required)
+  crossref:
+    enabled: true   # Always enabled, no API key required
+    base_url: "https://api.crossref.org"
+    email: ""       # Optional email for better rate limits
+    
+    settings:
+      max_results_per_request: 1000
+      # Focus on high-impact journals
+      min_impact_factor: 0.0
+      # Target journal quartiles
+      target_quartiles: ["Q1", "Q2"]
+      
+  # Semantic Scholar API
+  semantic_scholar:
+    enabled: false  # Set to true when API key is configured
+    api_key: ""     # Get API key from https://www.semanticscholar.org/product/api
+    base_url: "https://api.semanticscholar.org"
+    
+    settings:
+      max_results_per_request: 1000
+      # Include influential citations data
+      include_influential_citations: true
+      # Minimum citation count threshold
+      min_citations: 0
+      # Fields to retrieve
+      fields: ["title", "abstract", "authors", "year", "citationCount", "influentialCitationCount", "venue", "doi", "openAccessPdf"]
+      
+  # PubMed/Europe PMC API (Free, no authentication required)
+  pubmed:
+    enabled: true   # Always enabled, no API key required
+    pubmed_url: "https://eutils.ncbi.nlm.nih.gov/entrez/eutils"
+    europepmc_url: "https://www.ebi.ac.uk/europepmc/webservices/rest"
+    
+    settings:
+      max_results_per_request: 10000  # PubMed allows up to 10,000
+      # Include MeSH terms for better categorization
+      include_mesh_terms: true
+      # Focus on engineering and technical journals
+      exclude_clinical_only: true
+      
+  # Lens.org API
+  lens:
+    enabled: false  # Set to true when API key is configured
+    api_key: ""     # Get API key from https://www.lens.org/lens/user/subscriptions
+    base_url: "https://api.lens.org"
+    
+    settings:
+      max_results_per_request: 100
+      # Include patent data for comprehensive analysis
+      include_patents: false
+      # Sort by citation count descending
+      sort_by: "cited_by_count"
+      # PHM relevance threshold
+      min_phm_relevance: 0.3
+      
+  # Elsevier ScienceDirect API
+  elsevier:
+    enabled: false  # Set to true when API key is configured
+    api_key: ""     # Get your API key from https://dev.elsevier.com/apikey/create
+    base_url: "https://api.elsevier.com"
+    
+    # Elsevier-specific settings
+    settings:
+      # Include full text abstracts
+      include_abstracts: true
+      # Include author information
+      include_authors: true
+      # Include keyword information  
+      include_keywords: true
+      # Maximum results per request (Elsevier limit: 200)
+      max_results_per_request: 100
+      
+    # Search parameters for Elsevier
+    search_filters:
+      # Content type filters
+      content_types: ["journal", "book-series"]
+      # Subject areas (Engineering, Computer Science, etc.)
+      subject_areas: ["ENGI", "COMP", "MATH", "PHYS"]
+      # Only open access papers (set to true to filter)
+      open_access_only: false
+      
+  # IEEE Xplore API (requires separate API key)
+  ieee:
+    enabled: false  # Set to true when API key is configured
+    api_key: ""     # Get from IEEE Xplore developer portal
+    base_url: "https://ieeexploreapi.ieee.org/api/v1"
+    
+  # Web of Science API (requires institutional access)
+  web_of_science:
+    enabled: false
+    api_key: ""
+    base_url: "https://api.clarivate.com"
 
 # File System Configuration
 filesystem:

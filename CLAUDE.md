@@ -6,6 +6,11 @@
 
 **APPA (Awesome PHM Paper Agent)** 是一个智能学术论文管理系统，专注于 **真实学术数据查询**，使用 academic-researcher agent 从真实的学术数据库中发现、分析和组织 PHM 领域的研究论文。
 
+### 🚀 GitHub Awesome 项目 (GitHub Awesome Project)
+- **标准格式**: 遵循 Awesome 项目标准，适合开源社区协作
+- **自动更新**: 通过 Claude agents 实现定期自动更新论文库
+- **社区友好**: 支持贡献者添加新论文和改进分类
+
 ### 🔬 真实数据驱动 (Real Data Driven)
 - **数据源**: 使用 academic-researcher agent 查询 ArXiv、PubMed、Google Scholar 等真实学术数据库
 - **无虚假数据**: 完全杜绝虚假或模拟论文数据，确保所有论文信息来自真实出版物
@@ -15,11 +20,6 @@
 - **分类导航**: 按研究主题分类组织（深度学习、故障诊断、RUL预测、数字孪生等）
 - **双向链接**: 实现论文间、作者间、主题间的双向引用和导航
 - **多维索引**: 支持按年份、期刊、作者、引用数等多维度检索
-
-### 🚀 GitHub Awesome 项目 (GitHub Awesome Project)
-- **标准格式**: 遵循 Awesome 项目标准，适合开源社区协作
-- **自动更新**: 通过 Claude agents 实现定期自动更新论文库
-- **社区友好**: 支持贡献者添加新论文和改进分类
 
 ### 🤖 Agent 驱动更新 (Agent-Driven Updates)
 - **academic-researcher**: 🔥 **主要文献搜索引擎** - 集成PHM专业知识的增强版学术研究代理

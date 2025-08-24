@@ -604,28 +604,23 @@ class PaperReviewAgent(BaseAgent):
             return self.venue_scores['unknown']
     
     def _evaluate_phm_relevance_score(self, paper: Dict[str, Any]) -> float:
-        """评估PHM相关性评分"""
+        """评估PHM相关性评分 - 使用统一的paper_utils函数"""
         
-        title = paper.get('title', '').lower()
-        abstract = paper.get('abstract', '').lower()
-        full_text = f"{title} {abstract}"
-        
-        # 统计各类关键词出现次数
-        core_matches = sum(1 for kw in self.phm_keywords['core'] if kw.lower() in full_text)
-        tech_matches = sum(1 for kw in self.phm_keywords['technical'] if kw.lower() in full_text)
-        app_matches = sum(1 for kw in self.phm_keywords['applications'] if kw.lower() in full_text)
-        
-        # 计算相关性评分
-        total_matches = core_matches * 3 + tech_matches * 2 + app_matches * 1
-        max_possible = len(self.phm_keywords['core']) * 3 + len(self.phm_keywords['technical']) * 2 + len(self.phm_keywords['applications']) * 1
-        
-        relevance_score = min(total_matches / max_possible * 5, 1.0)  # 放大评分，最高为1.0
-        
-        # 特别奖励LLM+PHM的结合
-        if any(llm_term in full_text for llm_term in ['large language model', 'llm', 'chatgpt', 'transformer']):
-            relevance_score = min(relevance_score + 0.2, 1.0)
-        
-        return relevance_score
+        try:
+            from ..utils.paper_utils import calculate_phm_relevance_score
+            score, _ = calculate_phm_relevance_score(paper)
+            return score
+        except ImportError:
+            # 简化的回退实现
+            title = paper.get('title', '').lower()
+            abstract = paper.get('abstract', '').lower()
+            full_text = f"{title} {abstract}"
+            
+            # 基本PHM关键词检测
+            phm_keywords = ['prognostic', 'health management', 'fault diagnosis', 'predictive maintenance', 'rul', 'remaining useful life']
+            matches = sum(1 for kw in phm_keywords if kw in full_text)
+            
+            return min(1.0, matches * 0.2)  # 每个匹配0.2分，上限1.0
     
     def _evaluate_content_quality_score(self, paper: Dict[str, Any]) -> float:
         """评估内容质量评分"""

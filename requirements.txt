@@ -10,6 +10,11 @@ python-dateutil>=2.8.2    # Date parsing and manipulation
 scholarly>=1.7.11          # Google Scholar API
 arxiv>=1.4.8              # arXiv API client
 crossref-commons>=0.0.7   # Crossref API utilities
+pyalex>=0.13              # OpenAlex Python client (free, comprehensive)
+semanticscholar>=0.7.0    # Semantic Scholar API client
+python-dotenv>=1.0.0      # Environment variable management
+httpx>=0.25.0             # Modern HTTP client with async support  
+tenacity>=8.2.0           # Retry logic with exponential backoff
 
 # Data processing and analysis
 pandas>=2.1.0             # Data manipulation and analysis

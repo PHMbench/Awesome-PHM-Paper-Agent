@@ -1254,56 +1254,32 @@ from datetime import datetime, timedelta
 # Add APPA system to path
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from src.agents.real_paper_discovery_agent import RealPaperDiscoveryAgent
-from src.utils.knowledge_organizer import AwesomePHMKnowledgeOrganizer
+# Note: Import AwesomePHMKnowledgeOrganizer when needed in external scripts
 
 
 def discover_new_papers(config=None):
-    """Discover new PHM papers using real academic databases."""
+    """Discover new PHM papers using academic-researcher agent via Task tool."""
     
-    if not config:
-        config = {
-            'real_discovery_settings': {
-                'max_results_per_query': 20,
-                'min_relevance_score': 0.4,
-                'include_preprints': True,
-                'quality_threshold': 0.6
-            }
-        }
-    
-    # Initialize discovery agent
-    discovery_agent = RealPaperDiscoveryAgent(config)
-    
-    # Search recent papers (last 3 months)
-    search_input = {
-        'categories': ['deep_learning_phm', 'fault_diagnosis', 'rul_prediction', 'digital_twin'],
-        'date_range': '2023-2024',
-        'max_results': 15
-    }
-    
-    print("🔍 Discovering new PHM papers...")
-    papers = discovery_agent.process(search_input)
-    
-    print(f"📚 Found {len(papers)} potential new papers")
-    return papers
+    # Note: This function should use the academic-researcher agent via Task tool
+    # For now, return empty list - implement with actual academic search integration
+    print("🔍 Paper discovery requires academic-researcher agent integration...")
+    print("📚 Use academic-researcher agent via Task tool for real paper discovery")
+    return []
 
 
 def update_knowledge_base(papers):
     """Update the knowledge base with new papers."""
     
-    # Initialize knowledge organizer
-    repo_path = os.path.dirname(os.path.dirname(__file__))
-    organizer = AwesomePHMKnowledgeOrganizer(repo_path)
+    if not papers:
+        print("ℹ️  No papers to organize")
+        return {"total_papers": 0, "categories": [], "paper_files_created": 0}
     
-    print("📁 Organizing papers into knowledge base...")
-    summary = organizer.organize_papers(papers)
+    # Use the organizer instance within this module
+    # This should be called as a method of AwesomePHMKnowledgeOrganizer
+    print("📁 This function should be called as part of the organizer workflow")
+    print("   Use UpdateManager for paper updates with user confirmation")
     
-    print("✅ Knowledge base updated successfully!")
-    print(f"   - Papers processed: {summary['total_papers']}")
-    print(f"   - Categories: {summary['categories']}")
-    print(f"   - Files created: {summary['paper_files_created']}")
-    
-    return summary
+    return {"total_papers": len(papers), "categories": ["placeholder"], "paper_files_created": 0}
 
 
 def generate_update_report(papers, summary):
@@ -1365,48 +1341,38 @@ if __name__ == "__main__":
     main()
 '''
     
-    def _generate_bibtex(self, paper: Dict[str, Any]) -> str:
-        """Generate BibTeX entry for paper."""
-        return self._generate_bibtex_entry(paper)
-    
     def _generate_bibtex_entry(self, paper: Dict[str, Any]) -> str:
-        """Generate a BibTeX entry for a paper."""
-        
-        # Create citation key
-        authors = paper.get('authors', [])
-        first_author = authors[0].split()[-1] if authors else 'Unknown'
-        year = paper.get('year', datetime.now().year)
-        title_words = re.findall(r'\w+', paper.get('title', 'Unknown'))[:3]
-        title_key = ''.join(word.capitalize() for word in title_words)
-        
-        citation_key = f"{first_author}{year}{title_key}"
-        
-        # Build BibTeX entry
-        entry_type = "article" if paper.get('paper_type') == 'journal' else "inproceedings"
-        
-        bibtex = f"@{entry_type}{{{citation_key},\n"
-        bibtex += f'  title = {{{paper.get("title", "Unknown Title")}}},\n'
-        
-        if authors:
-            author_str = " and ".join(authors[:5])  # Limit to 5 authors
-            bibtex += f"  author = {{{author_str}}},\n"
-        
-        if paper.get('year'):
-            bibtex += f"  year = {{{paper['year']}}},\n"
-        
-        if paper.get('venue'):
-            venue_field = "journal" if paper.get('paper_type') == 'journal' else "booktitle"
-            bibtex += f"  {venue_field} = {{{paper['venue']}}},\n"
-        
-        if paper.get('doi'):
-            bibtex += f"  doi = {{{paper['doi']}}},\n"
-        
-        if paper.get('abstract'):
-            bibtex += f"  abstract = {{{paper['abstract']}}},\n"
-        
-        bibtex += "}\n"
-        
-        return bibtex
+        """Generate a BibTeX entry for a paper using Paper model."""
+        # Use the Paper model's BibTeX generation if available
+        # For backward compatibility, include minimal BibTeX generation here
+        try:
+            from ..models import Paper, VenueType
+            paper_obj = Paper(
+                title=paper.get('title', 'Unknown Title'),
+                authors=paper.get('authors', []),
+                year=paper.get('year', datetime.now().year),
+                venue=paper.get('venue', ''),
+                doi=paper.get('doi', ''),
+                type=VenueType.JOURNAL if paper.get('paper_type') == 'journal' else VenueType.CONFERENCE
+            )
+            return paper_obj.to_bibtex()
+        except ImportError:
+            # Fallback to simple BibTeX generation
+            authors = paper.get('authors', [])
+            first_author = authors[0].split()[-1] if authors else 'Unknown'
+            year = paper.get('year', datetime.now().year)
+            title = paper.get('title', 'Unknown Title')
+            
+            citation_key = f"{first_author}{year}"
+            entry_type = "article" if paper.get('paper_type') == 'journal' else "inproceedings"
+            
+            bibtex = f"@{entry_type}{{{citation_key},\n"
+            bibtex += f'  title = {{{title}}},\n'
+            bibtex += f'  author = {{{" and ".join(authors[:5])}}},\n'
+            bibtex += f"  year = {{{year}}},\n"
+            bibtex += "}\n"
+            
+            return bibtex
     
     def _slugify(self, text: str) -> str:
         """Convert text to URL-friendly slug."""
