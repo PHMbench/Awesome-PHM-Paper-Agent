@@ -4,7 +4,7 @@
 
 *🔥 主要关注影响因子≥5的期刊论文 | 🚫 自动过滤MDPI等低质量出版商 | 🤖 由Claude Code Agent驱动更新*
 
-[![Papers](https://img.shields.io/badge/Papers-32-blue)](#papers)
+[![Papers](https://img.shields.io/badge/Papers-42-blue)](#papers)
 [![Quality](https://img.shields.io/badge/Quality-IF≥5.0-green)](#quality-standards)
 [![Last Update](https://img.shields.io/badge/Last%20Update-2025--01--01-orange)](#contributing)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](#license)
@@ -18,11 +18,13 @@
   - [Transformer架构](#transformer-models)
   - [生成式AI](#generative-ai)
   - [NLP方法](#nlp-methods)
+  - [持续学习](#continual-learning)
 - [按主题分类](#categories)
   - [LLM Applications](categories/llm-applications/README.md) - 大语言模型专门应用 (12篇) 🚀
   - [Transformer Models](categories/transformer-models/README.md) - Transformer架构专题 (6篇)
   - [Generative AI](categories/generative-ai/README.md) - 生成式AI方法 (5篇)
   - [NLP Methods](categories/nlp-methods/README.md) - 自然语言处理技术 (7篇)
+  - [Continual Learning](categories/continual-learning/README.md) - 持续学习与增量学习 (10篇) 🔥
   - [故障诊断](#fault-diagnosis)
   - [预测性维护](#predictive-maintenance)
   - [深度学习方法](#deep-learning-methods)
@@ -107,6 +109,19 @@
 
 - **[Joint Knowledge Graph and Large Language Model for Fault Diagnosis and Its Application in Aviation Assembly](https://doi.org/10.1109/TII.2024.3366977)** - Liu, P. et al. (IEEE TII, 2024) 🏆
   - 图结构化数据与LLM的深度融合，实现智能故障推理
+
+### Continual Learning
+
+**🔄 持续学习在故障诊断中的突破性应用** | [完整分类 →](categories/continual-learning/README.md)
+
+- **Class Incremental Fault Diagnosis under Limited Fault Data via Supervised Contrastive Knowledge Distillation** - Zhang, Y. et al. (arXiv, 2025) ⭐ [BibTeX](data/bibtex/2025-ARXIV-Zhang-SCKD.bib)
+  - 最新的监督对比知识蒸馏方法，解决有限数据下的类别增量故障诊断
+
+- **Mitigating Catastrophic Forgetting in Cross-Domain Fault Diagnosis** - Liu, J. et al. (IEEE TII, 2024) 🏆 [BibTeX](data/bibtex/2024-IEEE-TII-Liu-UCILN.bib)
+  - 跨域故障诊断中灾难性遗忘的缓解方法
+
+- **A Novel Incremental Method for Bearing Fault Diagnosis** - Wang, H. et al. (MSSP, 2024) 🏆 [BibTeX](data/bibtex/2024-MSSP-Wang-IND.bib)
+  - 持续整合未知故障类型的增量学习创新方法
 
 ---
 

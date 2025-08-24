@@ -53,6 +53,7 @@
 - [Generative AI](../generative-ai/README.md) - 生成式AI用于故障数据增强
 - [NLP Methods](../nlp-methods/README.md) - 文本挖掘在故障报告分析中的应用
 - [Deep Learning](../deep-learning/README.md) - 深度学习基础方法
+- [Continual Learning](../continual-learning/README.md) - 持续学习用于增量故障诊断
 - [Predictive Maintenance](../predictive-maintenance/README.md) - 预测性维护技术
 
 ---

@@ -15,7 +15,6 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Any, Optional, Tuple, Set
 from datetime import datetime
 import requests
-from tenacity import retry, stop_after_attempt, wait_exponential
 
 from .logging_config import get_logger
 
@@ -96,7 +95,6 @@ class BaseAPIClient(ABC):
         
         self._last_request_time = time.time()
     
-    @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
     def _make_request(self, 
                      url: str,
                      method: str = 'GET',
@@ -119,48 +117,64 @@ class BaseAPIClient(ABC):
         Raises:
             APIClientError: If request fails after all retries
         """
-        # Apply rate limiting
-        self._enforce_rate_limit()
-        
-        # Prepare headers
-        headers = self.session.headers.copy()
-        if custom_headers:
-            headers.update(custom_headers)
-        
-        try:
-            if method.upper() == 'POST':
-                response = self.session.post(
-                    url, 
-                    params=params, 
-                    json=json_data, 
-                    headers=headers, 
-                    timeout=self.timeout
-                )
-            else:
-                response = self.session.get(
-                    url, 
-                    params=params, 
-                    headers=headers, 
-                    timeout=self.timeout
-                )
-            
-            # Handle specific status codes
-            if response.status_code == 200:
-                return response.json()
-            elif response.status_code == 401:
-                raise APIClientError(f"Authentication failed (401): Invalid API key")
-            elif response.status_code == 403:
-                raise APIClientError(f"Access forbidden (403): Check permissions")
-            elif response.status_code == 429:
-                self.logger.warning("Rate limit exceeded, retrying...")
-                raise requests.exceptions.RequestException("Rate limit exceeded")
-            else:
-                self.logger.warning(f"HTTP {response.status_code}: {response.text[:200]}")
-                response.raise_for_status()
+        # Retry logic
+        for attempt in range(self.max_retries + 1):
+            try:
+                # Apply rate limiting
+                self._enforce_rate_limit()
                 
-        except requests.exceptions.RequestException as e:
-            self.logger.error(f"Request failed: {e}")
-            raise APIClientError(f"Request failed: {e}")
+                # Prepare headers
+                headers = self.session.headers.copy()
+                if custom_headers:
+                    headers.update(custom_headers)
+                
+                if method.upper() == 'POST':
+                    response = self.session.post(
+                        url, 
+                        params=params, 
+                        json=json_data, 
+                        headers=headers, 
+                        timeout=self.timeout
+                    )
+                else:
+                    response = self.session.get(
+                        url, 
+                        params=params, 
+                        headers=headers, 
+                        timeout=self.timeout
+                    )
+                
+                # Handle specific status codes
+                if response.status_code == 200:
+                    return response.json()
+                elif response.status_code == 401:
+                    raise APIClientError(f"Authentication failed (401): Invalid API key")
+                elif response.status_code == 403:
+                    raise APIClientError(f"Access forbidden (403): Check permissions")
+                elif response.status_code == 429:
+                    # Rate limit - retry with exponential backoff
+                    if attempt < self.max_retries:
+                        wait_time = 2 ** attempt
+                        self.logger.warning(f"Rate limit exceeded, waiting {wait_time}s before retry {attempt + 1}")
+                        time.sleep(wait_time)
+                        continue
+                    else:
+                        raise APIClientError("Rate limit exceeded: max retries reached")
+                else:
+                    self.logger.warning(f"HTTP {response.status_code}: {response.text[:200]}")
+                    response.raise_for_status()
+                    
+            except requests.exceptions.RequestException as e:
+                if attempt < self.max_retries:
+                    wait_time = 2 ** attempt
+                    self.logger.warning(f"Request failed (attempt {attempt + 1}), retrying in {wait_time}s: {e}")
+                    time.sleep(wait_time)
+                    continue
+                else:
+                    self.logger.error(f"Request failed after {self.max_retries} retries: {e}")
+                    raise APIClientError(f"Request failed: {e}")
+                    
+        return None
     
     def calculate_phm_relevance(self, paper: Dict[str, Any]) -> float:
         """

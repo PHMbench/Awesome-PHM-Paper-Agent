@@ -52,6 +52,7 @@
 - [Transformer Models](../transformer-models/README.md) - Transformer架构专题
 - [Generative AI](../generative-ai/README.md) - 生成式AI方法
 - [NLP Methods](../nlp-methods/README.md) - 自然语言处理技术
+- [Continual Learning](../continual-learning/README.md) - 持续学习与增量学习
 - [Fault Diagnosis](../fault-diagnosis/README.md) - 故障诊断方法
 
 ---

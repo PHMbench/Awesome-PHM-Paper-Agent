@@ -1,36 +1,40 @@
 {
-  "total_papers": 32,
+  "total_papers": 42,
   "by_year": {
-    "2023": 10,
-    "2024": 16,
-    "2025": 6
+    "2020": 1,
+    "2021": 1,
+    "2022": 1,
+    "2023": 11,
+    "2024": 21,
+    "2025": 7
   },
   "by_category": {
     "llm-applications": 12,
     "transformer-models": 6,
     "generative-ai": 5,
     "nlp-methods": 7,
+    "continual-learning": 10,
     "knowledge-graph": 2,
     "fault-diagnosis": 20,
     "predictive-maintenance": 22
   },
   "by_quality_tier": {
-    "top_tier": 22,
+    "top_tier": 32,
     "excellent": 5,
     "good": 3,
     "under_review": 2
   },
   "by_venue_type": {
-    "journal": 24,
-    "conference": 4,
+    "journal": 32,
+    "conference": 6,
     "preprint": 4
   },
   "by_publisher": {
-    "IEEE": 10,
-    "Elsevier": 16,
+    "IEEE": 12,
+    "Elsevier": 21,
     "arXiv": 4,
     "Springer": 1,
-    "PHM Society": 1
+    "PHM Society": 2
   },
   "quality_metrics": {
     "average_impact_factor": 8.9,
@@ -41,6 +45,7 @@
   "research_trends": {
     "hot_topics": [
       "Large Language Models",
+      "Continual Learning",
       "Industry 5.0 Integration",
       "Human-Machine Collaboration",
       "Brain-Like Cognition",
@@ -52,6 +57,9 @@
     ],
     "emerging_methods": [
       "LoRA and QLoRA Fine-tuning",
+      "Supervised Contrastive Knowledge Distillation",
+      "Catastrophic Forgetting Mitigation",
+      "Incremental Novelty Discovery",
       "Brain-Like Chain of Thoughts (BLCoTs)",
       "Human-in-the-Loop LLM Systems",
       "PHM-LM Framework",
@@ -100,6 +108,9 @@
     "🚀 2025年重要更新：新增5篇最新LLM+PHM顶级论文",
     "涵盖Industry 5.0、Brain-like Cognition、LoRA/QLoRA fine-tuning等前沿技术",
     "更新BibTeX信息提高引用准确性",
-    "反映人机协作和实时LLM部署的最新趋势"
+    "反映人机协作和实时LLM部署的最新趋势",
+    "🔄 新增持续学习(Continual Learning)分类：收录10篇2020-2025年重要论文",
+    "涵盖知识蒸馏、灾难性遗忘、增量故障诊断等核心技术",
+    "建立完整的持续学习在PHM中的应用体系和技术分析框架"
   ]
 }

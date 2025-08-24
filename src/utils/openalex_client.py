@@ -13,6 +13,7 @@ import os
 import re
 import json
 import time
+import requests
 from typing import Dict, List, Any, Optional, Tuple, Union
 from datetime import datetime
 from urllib.parse import quote
@@ -290,7 +291,7 @@ class OpenAlexClient(BaseAPIClient):
         try:
             response = requests.get(
                 f"{self.base_url}/works",
-                headers=self.headers,
+                headers=self.session.headers,
                 params={'per-page': 1, 'mailto': self.email},
                 timeout=10
             )

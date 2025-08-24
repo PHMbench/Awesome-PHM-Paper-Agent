@@ -146,6 +146,7 @@ This category focuses on Transformer architectures specifically designed and ada
 - [Deep Learning](../deep-learning/README.md) - Traditional deep learning approaches
 - [Generative AI](../generative-ai/README.md) - Generative models and GANs
 - [NLP Methods](../nlp-methods/README.md) - Natural language processing techniques
+- [Continual Learning](../continual-learning/README.md) - Attention-based continual learning methods
 - [Fault Diagnosis](../fault-diagnosis/README.md) - Traditional fault diagnosis methods
 
 ## 📊 Technical Specifications
