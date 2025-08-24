@@ -46,5 +46,14 @@
 - 从离线诊断向实时在线诊断演进
 - 从故障检测向故障预测和预防转变
 
+## 🔗 相关分类
+
+- [LLM Applications](../llm-applications/README.md) - 大语言模型在故障诊断中的应用
+- [Transformer Models](../transformer-models/README.md) - Transformer架构用于故障模式识别
+- [Generative AI](../generative-ai/README.md) - 生成式AI用于故障数据增强
+- [NLP Methods](../nlp-methods/README.md) - 文本挖掘在故障报告分析中的应用
+- [Deep Learning](../deep-learning/README.md) - 深度学习基础方法
+- [Predictive Maintenance](../predictive-maintenance/README.md) - 预测性维护技术
+
 ---
-*最后更新: 2025-08-23*
+*最后更新: 2024-08-24*

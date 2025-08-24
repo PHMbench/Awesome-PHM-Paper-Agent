@@ -46,5 +46,13 @@
 2. **实时适应能力**: 提升模型对新场景的快速适应能力  
 3. **可解释性增强**: 提供更好的决策解释和推理过程
 
+## 🔗 相关分类
+
+- [LLM Applications](../llm-applications/README.md) - 大语言模型专门应用
+- [Transformer Models](../transformer-models/README.md) - Transformer架构专题
+- [Generative AI](../generative-ai/README.md) - 生成式AI方法
+- [NLP Methods](../nlp-methods/README.md) - 自然语言处理技术
+- [Fault Diagnosis](../fault-diagnosis/README.md) - 故障诊断方法
+
 ---
-*最后更新: 2025-08-23*
+*最后更新: 2024-08-24*

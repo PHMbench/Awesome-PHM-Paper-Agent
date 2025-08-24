@@ -1,66 +1,89 @@
 {
-  "total_papers": 2,
+  "total_papers": 27,
   "by_year": {
-    "2024": 2
+    "2023": 10,
+    "2024": 16,
+    "2025": 1
   },
   "by_category": {
-    "llm-applications": 2,
+    "llm-applications": 7,
+    "transformer-models": 6,
+    "generative-ai": 5,
+    "nlp-methods": 7,
     "knowledge-graph": 1,
-    "fault-diagnosis": 1,
-    "predictive-maintenance": 2
+    "fault-diagnosis": 15,
+    "predictive-maintenance": 18
   },
   "by_quality_tier": {
-    "top_tier": 1,
-    "excellent": 0,
-    "good": 0,
-    "under_review": 1
+    "top_tier": 18,
+    "excellent": 5,
+    "good": 2,
+    "under_review": 2
   },
   "by_venue_type": {
-    "journal": 1,
-    "conference": 0,
-    "preprint": 1
+    "journal": 20,
+    "conference": 4,
+    "preprint": 3
   },
   "by_publisher": {
-    "IEEE": 1,
-    "arXiv": 1
+    "IEEE": 8,
+    "Elsevier": 12,
+    "arXiv": 3,
+    "Springer": 3,
+    "PHM Society": 1
   },
   "quality_metrics": {
-    "average_impact_factor": 11.7,
-    "median_citations": 0,
-    "peer_reviewed_percentage": 50.0,
-    "open_access_percentage": 50.0
+    "average_impact_factor": 8.7,
+    "median_citations": 15,
+    "peer_reviewed_percentage": 88.9,
+    "open_access_percentage": 45.0
   },
   "research_trends": {
     "hot_topics": [
       "Large Language Models",
+      "Transformer Architectures",
+      "Generative AI",
+      "BERT Applications",
       "Knowledge Graph Fusion",
       "Industrial Applications",
-      "ChatGPT Enhancement"
+      "Multimodal AI",
+      "Foundation Models"
     ],
     "emerging_methods": [
       "Prefix Tuning",
       "Local Knowledge Base",
-      "Retrieval Augmented Generation"
+      "Retrieval Augmented Generation",
+      "Attention Mechanisms",
+      "Bayesian Transformers",
+      "Diffusion Models",
+      "Cross-attention Fusion",
+      "Domain Adaptation"
     ],
     "application_domains": [
       "Aviation Assembly",
       "Industrial Systems",
-      "General PHM"
+      "General PHM",
+      "Manufacturing Quality Control",
+      "Energy Systems",
+      "Transportation",
+      "Aerospace",
+      "Maintenance Documentation"
     ]
   },
   "data_sources": {
-    "ieee_xplore": 1,
-    "arxiv": 1,
-    "google_scholar": 0,
-    "elsevier": 0
+    "ieee_xplore": 8,
+    "arxiv": 3,
+    "sciencedirect": 12,
+    "springer": 3,
+    "phm_society": 1
   },
   "phm_relevance": {
-    "high_relevance": 2,
-    "medium_relevance": 0,
+    "high_relevance": 25,
+    "medium_relevance": 2,
     "low_relevance": 0,
-    "average_score": 0.935
+    "average_score": 0.92
   },
-  "last_updated": "2025-08-23T12:00:00Z",
+  "last_updated": "2024-08-24T12:00:00Z",
   "generated_by": "APPA UpdateManager v2.0",
   "notes": [
     "重构为Awesome格式，突出质量优先",
@@ -68,6 +91,11 @@
     "添加MDPI过滤和影响因子控制",
     "详细数据移至data/文件夹",
     "完成论文数据迁移到新目录结构",
-    "每篇论文包含: index.json, README.md, abstract.txt, refs.bib"
+    "每篇论文包含: index.json, README.md, abstract.txt, refs.bib",
+    "新增LLM前沿应用分类体系",
+    "添加4个新类别：LLM应用、Transformer模型、生成式AI、NLP方法",
+    "收录25篇2023-2024年LLM在PHM领域的前沿论文",
+    "建立完整的AI驱动PHM研究分类体系",
+    "更新统计数据反映AI技术在PHM中的快速发展"
   ]
 }
