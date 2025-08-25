@@ -6,7 +6,7 @@
 
 This category focuses on Transformer architectures specifically designed and adapted for Prognostics and Health Management tasks. Unlike general LLMs, these works leverage the attention mechanism and transformer architecture for time-series analysis, fault pattern recognition, and predictive modeling in industrial systems.
 
-**Current Papers**: 6 papers  
+**Current Papers**: 8 papers  
 **Time Span**: 2023-2024  
 **Research Trend**: 🔥 **Very Hot** - Strong focus on architectural innovations
 
@@ -20,19 +20,35 @@ This category focuses on Transformer architectures specifically designed and ada
 - **Achievement**: Superior performance in noisy industrial environments
 - **Application**: Rolling bearing diagnostics with vibration signal analysis
 
-**Cross-attention Transformer for Multi-sensor Fusion in PHM** - Kumar, A. et al. (MSSP, 2024) 🏆 [BibTeX]
-- **Innovation**: Multi-sensor data fusion using cross-attention mechanisms
-- **Method**: Attention-based sensor fusion with temporal modeling
-- **Scope**: Multi-modal sensor integration for comprehensive health assessment
-- **Performance**: 15% improvement over traditional fusion methods
+**Few-Shot Bearing Fault Diagnosis Via Ensembling Transformer-Based Model With Mahalanobis Distance Metric Learning** - Authors et al. (IEEE TII, 2024) 🏆 [BibTeX](../../data/bibtex/2024-IEEE-TII-FewShot-Transformer.bib)
+- **DOI**: 10.1109/TII.2024.3378558
+- **Innovation**: Ensemble transformer with Mahalanobis distance metric learning
+- **Method**: Multi-scale feature extraction with distance metric learning
+- **Application**: Few-shot bearing fault diagnosis with limited training data
+- **Performance**: Superior accuracy in few-shot scenarios
 
-**Vision Transformer for Surface Defect Detection in Manufacturing** - Chen, L. et al. (Expert Systems with Applications, 2024) 🏆 [BibTeX]
-- **Innovation**: ViT adaptation for industrial surface inspection
-- **Method**: Patch-based attention for defect localization and classification
-- **Application**: Quality control in manufacturing processes
-- **Impact**: Real-time defect detection with 97.8% accuracy
+**FaultFormer: Pretraining Transformers for Adaptable Bearing Fault Classification** - Authors et al. (ArXiv, 2024) ⭐ [BibTeX](../../data/bibtex/2024-ARXIV-FaultFormer.bib)
+- **ArXiv**: 2312.02380v2
+- **Innovation**: Pre-training approach for adaptable fault classification
+- **Method**: Foundation model pre-training for fault diagnosis
+- **Application**: Adaptable bearing fault classification across domains
+- **Impact**: Improved generalization through pre-training
+
+**Transformer network enhanced by dual convolutional neural network and cross-attention for wheelset bearing fault diagnosis** - Authors et al. (Frontiers in Physics, 2025) 🏆 [BibTeX](../../data/bibtex/2025-FIP-Dual-CNN-Transformer.bib)
+- **DOI**: 10.3389/fphy.2025.1546620
+- **Innovation**: Dual CNN enhancement with cross-attention mechanisms
+- **Method**: CNN feature extraction combined with transformer attention
+- **Application**: Wheelset bearing fault diagnosis
+- **Achievement**: Enhanced feature representation through dual CNN-transformer fusion
 
 ### 2023
+
+**Diagnosisformer: An efficient rolling bearing fault diagnosis method based on improved Transformer** - Hou, Y., Wang, J., Chen, Z., Ma, J., Li, T. (Engineering Applications of AI, 2023) 🏆 [BibTeX](../../data/bibtex/2023-EAAI-Diagnosisformer.bib)
+- **DOI**: 10.1016/j.engappai.2023.106507
+- **Innovation**: Improved transformer architecture for rolling bearing diagnosis
+- **Method**: Enhanced attention mechanisms for fault pattern recognition
+- **Performance**: 99.84% accuracy on self-made dataset, 99.85% on CWRU dataset
+- **Application**: Rolling bearing fault diagnosis with high accuracy
 
 **Domain Fuzzy Generalization Networks for Semi-supervised Intelligent Fault Diagnosis under Unseen Working Conditions** - Huang, W. et al. (MSSP, 2023) 🏆 [BibTeX]
 - **Innovation**: Domain adaptation with transformer architecture for variable operating conditions

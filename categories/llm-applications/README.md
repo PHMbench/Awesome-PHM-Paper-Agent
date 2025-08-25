@@ -6,7 +6,7 @@
 
 This category encompasses the cutting-edge applications of Large Language Models (LLMs) including GPT, ChatGPT, and other foundation models in Prognostics and Health Management. This represents the newest frontier in AI-assisted industrial monitoring and maintenance.
 
-**Current Papers**: 12 papers  
+**Current Papers**: 15 papers  
 **Time Span**: 2023-2025  
 **Research Trend**: 🔥 **Extremely Hot** - Breakthrough applications with rapid industrial adoption
 
@@ -43,6 +43,26 @@ This category encompasses the cutting-edge applications of Large Language Models
 - **Innovation**: Multi-round prompting methodology for fault consultation
 - **Method**: Structured prompting techniques for improved diagnostic accuracy
 - **Application**: Practical framework for industrial fault consultation
+
+**An Innovative Foundation Model for Bearing Prognostics and Health Management Through Pre-Trained Large Language Models** - Wenxuan Wang, Dan Wang (SSRN, 2024) 🏆 [BibTeX](../../data/bibtex/2024-SSRN-Wang-Foundation-Bearing.bib)
+- **DOI**: SSRN Abstract ID: 5127433
+- **Innovation**: "Pulse" foundation model integrating signal and prompt data modalities
+- **Method**: Pre-trained LLM adaptation for bearing PHM applications
+- **Application**: Comprehensive bearing prognostics with foundation model architecture
+- **Impact**: Novel multi-modal approach combining signals with natural language processing
+
+**Zero-Shot Attribute Consistent Model for Bearing Fault Diagnosis Under Unknown Domain** - Authors et al. (IEEE TII, 2024) 🏆 [BibTeX](../../data/bibtex/2024-IEEE-TII-ZeroShot-Bearing.bib)
+- **DOI**: 10.1109/TII.2024.3374051
+- **Innovation**: Cross-domain zero-shot learning without target domain data
+- **Method**: Attribute consistency for domain adaptation
+- **Application**: Bearing fault diagnosis in unknown operational domains
+- **Performance**: Robust fault detection without target domain training data
+
+**ChatGPT-like Large-Scale Foundation Models for PHM: A Survey and Roadmaps - Updated Edition** - Research Team (Reliability Engineering & System Safety, 2024) 🏆 [BibTeX](../../data/bibtex/2024-RESS-LLM-PHM-Survey.bib)
+- **Type**: Comprehensive updated survey
+- **Innovation**: Latest systematic analysis of LSF-Models for PHM applications
+- **Coverage**: Recent advances in LLM applications for industrial monitoring
+- **Roadmap**: Future directions for LLM-PHM integration
 
 ### 2025
 

@@ -4,9 +4,9 @@
 
 *🔥 主要关注影响因子≥5的期刊论文 | 🚫 自动过滤MDPI等低质量出版商 | 🤖 由Claude Code Agent驱动更新*
 
-[![Papers](https://img.shields.io/badge/Papers-42-blue)](#papers)
+[![Papers](https://img.shields.io/badge/Papers-55-blue)](#papers)
 [![Quality](https://img.shields.io/badge/Quality-IF≥5.0-green)](#quality-standards)
-[![Last Update](https://img.shields.io/badge/Last%20Update-2025--01--01-orange)](#contributing)
+[![Last Update](https://img.shields.io/badge/Last%20Update-2025--01--25-orange)](#contributing)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](#license)
 
 ---
@@ -20,9 +20,12 @@
   - [NLP方法](#nlp-methods)
   - [持续学习](#continual-learning)
 - [按主题分类](#categories)
-  - [LLM Applications](categories/llm-applications/README.md) - 大语言模型专门应用 (12篇) 🚀
-  - [Transformer Models](categories/transformer-models/README.md) - Transformer架构专题 (6篇)
-  - [Generative AI](categories/generative-ai/README.md) - 生成式AI方法 (5篇)
+  - [LLM Applications](categories/llm-applications/README.md) - 大语言模型专门应用 (15篇) 🚀
+  - [Transformer Models](categories/transformer-models/README.md) - Transformer架构专题 (8篇)
+  - [Generative AI](categories/generative-ai/README.md) - 生成式AI方法 (7篇)
+  - [Graph Neural Networks](categories/graph-neural-networks/README.md) - 图神经网络应用 (3篇) 🎆
+  - [Reinforcement Learning](categories/reinforcement-learning/README.md) - 强化学习优化 (3篇) 🎮
+  - [Quantum Computing](categories/quantum-computing/README.md) - 量子计算PHM (2篇) ⚛️
   - [NLP Methods](categories/nlp-methods/README.md) - 自然语言处理技术 (7篇)
   - [Continual Learning](categories/continual-learning/README.md) - 持续学习与增量学习 (10篇) 🔥
   - [故障诊断](#fault-diagnosis)
@@ -74,11 +77,6 @@
 
 **🔄 Transformer架构在PHM中的专门应用** | [完整分类 →](categories/transformer-models/README.md)
 
-- **Cross-attention Transformer for Multi-sensor Fusion in PHM** - Kumar, A. et al. (MSSP, 2024) 🏆 [BibTeX]
-  - 多传感器数据融合的交叉注意力机制，性能提升15%
-
-- **Vision Transformer for Surface Defect Detection** - Chen, L. et al. (Expert Systems, 2024) 🏆 [BibTeX]
-  - ViT在工业表面检测中的应用，实现97.8%准确率
 
 ### 2024 - Generative AI
 
@@ -87,8 +85,6 @@
 - **Generative Adversarial Networks for PHM: A Review** - Review Team (Expert Systems, 2024) 🏆 [BibTeX](data/bibtex/2024-ESWA-GANs-PHM-Review.bib)
   - 2014-2024年GANs在PHM中应用的全面综述
 
-- **Diffusion Models for Industrial Sensor Data Generation** - Sensor AI Lab (IEEE TII, 2024) 🏆 [BibTeX]
-  - 扩散模型在工业传感器数据合成中的首次应用
 
 ### 2023 - Foundation Papers
 
@@ -100,7 +96,7 @@
 - **Domain Fuzzy Generalization Networks for Fault Diagnosis** - Huang, W. et al. (MSSP, 2023) 🏆 [BibTeX](data/bibtex/2023-MSSP-Huang-Domain-Transformer.bib)
   - Transformer架构在变工况故障诊断中的突破性应用
 
-- **LogBERT: Log Anomaly Detection via BERT** - Log Analysis Group (IEEE, 2023) 🏆 [BibTeX](data/bibtex/2023-IEEE-LogBERT.bib)
+- **LogBERT: Log Anomaly Detection via BERT** - Guo, H. et al. (IEEE IJCNN, 2021) 🏆 [BibTeX](data/bibtex/2021-IEEE-LogBERT.bib)
   - BERT在工业日志异常检测中的成功应用
 
 ### Knowledge Graph Fusion

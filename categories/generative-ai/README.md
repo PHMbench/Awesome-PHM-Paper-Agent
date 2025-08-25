@@ -6,7 +6,7 @@
 
 This category covers Generative Artificial Intelligence applications in Prognostics and Health Management, including Generative Adversarial Networks (GANs), Variational Autoencoders (VAEs), Diffusion Models, and other generative approaches. These models excel at data augmentation, synthetic fault generation, and anomaly detection through reconstruction.
 
-**Current Papers**: 5 papers  
+**Current Papers**: 7 papers  
 **Time Span**: 2023-2024  
 **Research Trend**: 🔥 **Hot** - Rapidly expanding with breakthrough applications
 
@@ -21,31 +21,51 @@ This category covers Generative Artificial Intelligence applications in Prognost
 - **Key Findings**: GANs effective for data augmentation, fault diagnostics, and RUL estimation
 - **Impact**: Defining the scope and potential of generative AI in PHM
 
-**Generative AI in Industrial Machine Vision: A Review** - Vision AI Research Group (Journal of Intelligent Manufacturing, 2024) 🏆 [BibTeX]
+**Generative AI in Industrial Machine Vision: A Review** - Hans Aoyang Zhou et al. (Journal of Intelligent Manufacturing, 2024) 🏆 [BibTeX](data/bibtex/2024-JIM-Zhou-GenAI-Vision.bib)
+- **DOI**: 10.1007/s10845-025-02604-6
+- **arXiv**: 2408.10775
 - **Focus**: Computer vision applications of generative models
 - **Applications**: Pattern recognition, image resolution enhancement, anomaly identification
 - **Innovation**: Systematic analysis of generative AI for industrial visual inspection
 - **Scope**: Manufacturing quality control and defect detection
 
-**Diffusion Models for Industrial Sensor Data Generation** - Sensor AI Lab (IEEE TII, 2024) 🏆 [BibTeX]
-- **Innovation**: First application of diffusion models for industrial sensor data synthesis
-- **Method**: Denoising diffusion probabilistic models for multi-variate time series
-- **Application**: Generating realistic sensor data for training fault detection models
-- **Achievement**: Superior data quality compared to traditional GANs
+**Fault diagnosis using variational autoencoder GAN and focal loss CNN under unbalanced data** - Weihan Li, Dunke Liu, Yang Li, Ming Hou, Jie Liu, Zhen Zhao, Aibin Guo, Huimin Zhao, Wu Deng (Structural Health Monitoring, 2024) 🏆 [BibTeX](data/bibtex/2024-SHM-Li-VAE-GAN.bib)
+- **DOI**: 10.1177/14759217241254121
+- **Innovation**: VAE-GAN hybrid approach with focal loss CNN for imbalanced fault data
+- **Method**: VGAIC-FDM combining continuous wavelet transform with grayscale time-frequency images
+- **Application**: Addressing poor generalization under imbalanced data distributions
+- **Impact**: Improved diagnostic efficiency for unbalanced fault datasets
 
-**StyleGAN for Synthetic Defect Generation in Manufacturing** - Manufacturing AI Group (Computers & Industrial Engineering, 2024) 🏆 [BibTeX]
-- **Innovation**: StyleGAN adaptation for synthetic manufacturing defect generation
-- **Method**: Style transfer and controlled defect synthesis
-- **Application**: Quality control training data generation
-- **Impact**: Reducing dependency on real defect data collection
+**Industrial product surface defect detection via the fast denoising diffusion implicit model** - Wang, Y., Yang, Y., Liu, M. et al. (International Journal of Machine Learning and Cybernetics, 2024) 🏆 [BibTeX](data/bibtex/2024-IJMLC-Wang-Diffusion.bib)
+- **DOI**: 10.1007/s13042-024-02213-4
+- **Innovation**: Fast Denoising Diffusion Implicit Model for real-time defect detection
+- **Method**: Enhanced noise predictor influenced by spectral radius feature tensor
+- **Application**: Industrial surface defect detection with limited training samples
+- **Achievement**: Real-time processing capability for manufacturing quality control
+
+**Imbalanced data fault diagnosis of rolling bearings using enhanced relative generative adversarial network** - ERGAN Authors et al. (Journal of Mechanical Science and Technology, 2024) 🏆 [BibTeX](data/bibtex/2024-JMST-ERGAN.bib)
+- **DOI**: 10.1007/s12206-024-0104-2
+- **Innovation**: Enhanced Relative GAN (ERGAN) for imbalanced bearing fault datasets
+- **Method**: Data augmentation model specifically designed for fault diagnosis
+- **Application**: Rolling bearing fault detection and classification
+- **Performance**: Superior fault diagnosis capability in imbalanced data scenarios
+
+**Review of imbalanced fault diagnosis technology based on generative adversarial networks** - Review Authors et al. (Journal of Computational Design and Engineering, 2024) 🏆 [BibTeX](data/bibtex/2024-JCDE-GAN-Review.bib)
+- **Type**: Comprehensive systematic review
+- **Coverage**: GAN applications for imbalanced data in fault diagnosis
+- **Innovation**: Analysis of progressive generation approaches and network architectures
+- **Scope**: Rolling bearing fault diagnosis, infrared thermography, defect detection
+- **Impact**: Framework for understanding GAN applications in industrial PHM
+
+**Denoising diffusion probabilistic model-enabled data augmentation method for intelligent machine fault diagnosis** - Authors et al. (Engineering Applications of AI, 2024) 🏆 [BibTeX](data/bibtex/2024-EAAI-DDPM-Fault-Diagnosis.bib)
+- **DOI**: 10.1016/j.engappai.2024.109164
+- **Innovation**: DDPM for high-quality fault data generation and augmentation
+- **Method**: Denoising diffusion probabilistic models for vibration signal synthesis
+- **Application**: Intelligent machine fault diagnosis with limited training data
+- **Performance**: Superior data quality compared to traditional GANs
+- **Impact**: First successful application of diffusion models in fault diagnosis
 
 ### 2023
-
-**Conditional Variational Autoencoder for Fault Data Augmentation in PHM** - VAE Research Team (Mechanical Systems and Signal Processing, 2023) 🏆 [BibTeX]
-- **Innovation**: Conditional VAE for targeted fault scenario generation
-- **Method**: Latent space manipulation for controlled fault synthesis
-- **Application**: Balanced dataset creation for rare fault types
-- **Performance**: 25% improvement in rare fault detection accuracy
 
 ## 🎯 Generative Model Types
 

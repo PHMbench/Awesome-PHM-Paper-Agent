@@ -1,4 +1,4 @@
-# 🤖 CLAUDE.md - Claude Code专用配置
+# 🤖 CLAUDE.md - Claude Code专用配置 [重要,本文件禁止修改]
 
 *APPA系统的Claude Code配置文件*
 
