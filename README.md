@@ -4,9 +4,9 @@
 
 *🔥 主要关注影响因子≥5的期刊论文 | 🚫 自动过滤MDPI等低质量出版商 | 🤖 由Claude Code Agent驱动更新*
 
-[![Papers](https://img.shields.io/badge/Papers-50-blue)](#papers)
+[![Papers](https://img.shields.io/badge/Papers-35-blue)](#papers)
 [![Quality](https://img.shields.io/badge/Quality-IF≥5.0-green)](#quality-standards)
-[![Last Update](https://img.shields.io/badge/Last%20Update-2025--01--25-orange)](#contributing)
+[![Last Update](https://img.shields.io/badge/Last%20Update-2025--08--24-orange)](#contributing)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](#license)
 
 ---
@@ -20,7 +20,7 @@
   - [NLP方法](#nlp-methods)
   - [持续学习](#continual-learning)
 - [按主题分类](#categories)
-  - [LLM Applications](categories/llm-applications/README.md) - 大语言模型专门应用 (10篇) 🚀
+  - [LLM Applications](categories/llm-applications/README.md) - 大语言模型专门应用 (8篇) 🚀
   - [Transformer Models](categories/transformer-models/README.md) - Transformer架构专题 (5篇)
   - [Generative AI](categories/generative-ai/README.md) - 生成式AI方法 (7篇)
   - [Graph Neural Networks](categories/graph-neural-networks/README.md) - 图神经网络应用 (3篇) 🎆
