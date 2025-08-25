@@ -6,19 +6,13 @@
 
 This category focuses on Transformer architectures specifically designed and adapted for Prognostics and Health Management tasks. Unlike general LLMs, these works leverage the attention mechanism and transformer architecture for time-series analysis, fault pattern recognition, and predictive modeling in industrial systems.
 
-**Current Papers**: 8 papers  
+**Current Papers**: 5 papers  
 **Time Span**: 2023-2024  
 **Research Trend**: 🔥 **Very Hot** - Strong focus on architectural innovations
 
 ## 📚 Featured Papers
 
 ### 2024
-
-**Swin Transformer for Rolling Bearing Fault Detection in Noisy Environments** - Zhang, M. et al. (IEEE TIM, 2024) 🏆 [BibTeX]
-- **Innovation**: Hierarchical vision transformer for bearing fault detection
-- **Method**: Shifted window attention mechanism for local-global feature learning
-- **Achievement**: Superior performance in noisy industrial environments
-- **Application**: Rolling bearing diagnostics with vibration signal analysis
 
 **Few-Shot Bearing Fault Diagnosis Via Ensembling Transformer-Based Model With Mahalanobis Distance Metric Learning** - Authors et al. (IEEE TII, 2024) 🏆 [BibTeX](../../data/bibtex/2024-IEEE-TII-FewShot-Transformer.bib)
 - **DOI**: 10.1109/TII.2024.3378558
@@ -55,18 +49,6 @@ This category focuses on Transformer architectures specifically designed and ada
 - **Method**: Semi-supervised learning with attention-based domain generalization
 - **Challenge**: Addressing fault diagnosis under variable operating conditions
 - **Achievement**: Robust performance across different working conditions
-
-**Bayesian Variational Transformer (Bayesformer) for Rotating Machinery Fault Diagnosis** - Rodriguez, C. et al. (Mechanical Systems and Signal Processing, 2023) 🏆 [BibTeX]
-- **Innovation**: Uncertainty quantification in attention mechanisms using Bayesian variational learning
-- **Method**: Bayesian enhancement of transformer models for improved generalization
-- **Focus**: Rotating machinery diagnostics with uncertainty estimation
-- **Advantage**: Better handling of out-of-distribution scenarios
-
-**Multi-head Attention Transformer for Remaining Useful Life Prediction** - Park, S. et al. (Reliability Engineering & System Safety, 2023) 🏆 [BibTeX]
-- **Innovation**: Multi-head attention specifically designed for RUL prediction
-- **Method**: Temporal attention mechanisms for degradation pattern modeling
-- **Application**: Equipment remaining useful life estimation
-- **Performance**: State-of-the-art results on multiple RUL benchmarks
 
 ## 🏗️ Architectural Innovations
 

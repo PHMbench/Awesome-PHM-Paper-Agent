@@ -26,6 +26,7 @@ from ..utils.paper_utils import (
     calculate_phm_relevance_score, classify_methodology, 
     identify_application_domains, assess_venue_quality
 )
+from ..utils.llm_analysis import generate_tldr_summary
 from ..utils.phm_constants import (
     PHM_CONCEPTS, METHODOLOGY_KEYWORDS, APPLICATION_DOMAINS,
     VENUE_QUALITY_MAPPING, RELEVANCE_THRESHOLDS

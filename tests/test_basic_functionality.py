@@ -170,23 +170,17 @@ class TestAgentImports(unittest.TestCase):
     """Test that agents can be imported and initialized."""
     
     def test_agent_imports(self):
-        """Test that all agents can be imported."""
+        """Test that available agents can be imported."""
         try:
-            from src.agents.paper_discovery_agent import PaperDiscoveryAgent
             from src.agents.quality_curation_agent import QualityCurationAgent
             from src.agents.content_analysis_agent import ContentAnalysisAgent
-            from src.agents.filesystem_organization_agent import FileSystemOrganizationAgent
-            from src.agents.cross_reference_linking_agent import CrossReferenceLinkingAgent
             
-            # Test that classes exist
-            self.assertTrue(hasattr(PaperDiscoveryAgent, 'process'))
+            # Test that classes exist and have process method
             self.assertTrue(hasattr(QualityCurationAgent, 'process'))
             self.assertTrue(hasattr(ContentAnalysisAgent, 'process'))
-            self.assertTrue(hasattr(FileSystemOrganizationAgent, 'process'))
-            self.assertTrue(hasattr(CrossReferenceLinkingAgent, 'process'))
             
         except ImportError as e:
-            self.fail(f"Failed to import agents: {e}")
+            self.fail(f"Failed to import available agents: {e}")
     
     @patch('src.utils.logging_config.setup_logging')
     def test_agent_initialization(self, mock_setup_logging):
@@ -209,13 +203,13 @@ class TestAgentImports(unittest.TestCase):
         self.assertIsNotNone(agent.config)
 
 
-class TestMainOrchestrator(unittest.TestCase):
-    """Test main orchestrator functionality."""
+class TestMainStatusManager(unittest.TestCase):
+    """Test main status manager functionality."""
     
     @patch('src.utils.config.load_config')
     @patch('src.utils.logging_config.setup_logging')
-    def test_orchestrator_import(self, mock_setup_logging, mock_load_config):
-        """Test that orchestrator can be imported and initialized."""
+    def test_status_manager_import(self, mock_setup_logging, mock_load_config):
+        """Test that status manager can be imported and initialized."""
         mock_load_config.return_value = {
             'search_parameters': {'keywords': ['test']},
             'quality_filters': {'venue_whitelist': []},
@@ -225,13 +219,16 @@ class TestMainOrchestrator(unittest.TestCase):
         
         try:
             import main
-            orchestrator = main.APPAOrchestrator()
-            self.assertIsNotNone(orchestrator.config)
-            self.assertIsNotNone(orchestrator.discovery_agent)
-            self.assertIsNotNone(orchestrator.curation_agent)
+            status_manager = main.APPAStatusManager()
+            self.assertIsNotNone(status_manager.config)
+            
+            # Test status functionality
+            status = status_manager.get_system_status()
+            self.assertIn('system_type', status)
+            self.assertEqual(status['system_type'], 'Claude Code Agent Based')
             
         except Exception as e:
-            self.fail(f"Failed to initialize orchestrator: {e}")
+            self.fail(f"Failed to initialize status manager: {e}")
 
 
 if __name__ == '__main__':

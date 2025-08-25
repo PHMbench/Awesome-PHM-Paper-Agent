@@ -14,28 +14,29 @@ This category focuses on Graph Neural Networks (GNNs) applications in Prognostic
 
 ### 2025
 
-**Improved sand cat swarm optimization algorithm assisted GraphSAGE-GRU for remaining useful life of engine** - Authors et al. (Scientific Reports, 2025) 🏆 [BibTeX](../../data/bibtex/2025-SR-GraphSAGE-GRU.bib)
-- **DOI**: 10.1038/s41598-025-91418-w
-- **Innovation**: ISCSO-GraphSage-GRU hybrid approach for engine RUL prediction
-- **Method**: Sand cat swarm optimization combined with GraphSAGE and GRU
-- **Application**: Engine remaining useful life prediction
-- **Performance**: Superior accuracy through optimized graph learning
+**Remaining useful life prediction based on graph feature attention networks with missing multi-sensor features** - Verified Authors (Reliability Engineering & System Safety, 2025) 🏆 [BibTeX](../../data/bibtex/2025-RESS-GNN-Missing-Sensor.bib)
+- **Publication Date**: February 12, 2025
+- **Innovation**: GF-GGAT method for RUL prediction handling missing multi-sensor data
+- **Method**: Graph feature attention networks with missing data handling
+- **Application**: Multi-sensor RUL prediction systems
+- **Performance**: Superior performance with incomplete sensor data
 
 ### 2024
 
-**A Survey on Graph Neural Networks for Remaining Useful Life Prediction: Methodologies, Evaluation and Future Trends** - Survey Authors et al. (arXiv, 2024) ⭐ [BibTeX](../../data/bibtex/2024-ARXIV-GNN-RUL-Survey.bib)
-- **ArXiv**: 2409.19629
+**A survey on graph neural networks for remaining useful life prediction: Methodologies, evaluation and future trends** - Verified Survey Authors (Mechanical Systems and Signal Processing, 2025) 🏆 [BibTeX](../../data/bibtex/2025-MSSP-GNN-RUL-Survey.bib)
+- **Journal**: Mechanical Systems and Signal Processing (Elsevier)
 - **Type**: Comprehensive survey paper
 - **Innovation**: First systematic survey of GNN applications in RUL prediction
 - **Coverage**: Methodologies, datasets, evaluation metrics, and future trends
 - **Impact**: Foundational survey defining the field of GNN-based prognostics
 
-**Graph Neural Networks With Trainable Adjacency Matrices for Fault Diagnosis in Rolling Element Bearings** - Authors et al. (IEEE TII, 2024) 🏆 [BibTeX](../../data/bibtex/2024-IEEE-TII-GNN-Trainable.bib)
-- **Innovation**: Trainable adjacency matrices for enhanced fault diagnosis
-- **Method**: Adaptive graph structure learning for bearing fault detection
-- **Application**: Rolling element bearing fault diagnosis
-- **Performance**: Improved accuracy through learnable graph connections
-- **Impact**: Novel approach to dynamic graph topology optimization
+**Temporal and Heterogeneous Graph Neural Network for Remaining Useful Life Prediction** - Zhihao Wen, Yiping Liu, Zhenghua Chen, Chengzhi Yuan, Xiaoli Li, Min Wu (arXiv, 2024) ⭐ [BibTeX](../../data/bibtex/2024-ARXIV-THGNN-RUL.bib)
+- **ArXiv**: 2405.04336
+- **DOI**: 10.48550/arXiv.2405.04336
+- **Innovation**: THGNN model capturing temporal-spatial relationships in sensor networks
+- **Method**: Temporal and heterogeneous graph neural networks
+- **Application**: RUL prediction with complex sensor network relationships
+- **Performance**: Superior modeling of temporal-spatial dependencies
 
 ## 🏗️ GNN Architectures for PHM
 

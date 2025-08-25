@@ -8,7 +8,7 @@ Input: Raw paper metadata list (JSON)
 Output: Curated paper list with quality scores and filtering justifications
 """
 
-from typing import List, Dict, Any, Set
+from typing import List, Dict, Any, Set, Optional
 import re
 from datetime import datetime
 

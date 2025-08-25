@@ -17,18 +17,16 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from src.utils.config import load_config, ConfigError
 from src.utils.logging_config import setup_logging, get_logger
-from src.agents.paper_discovery_agent import PaperDiscoveryAgent
-from src.agents.quality_curation_agent import QualityCurationAgent
-from src.agents.content_analysis_agent import ContentAnalysisAgent
-from src.agents.filesystem_organization_agent import FileSystemOrganizationAgent
-from src.agents.cross_reference_linking_agent import CrossReferenceLinkingAgent
+# Legacy agent imports removed - now using Claude Code agents directly
+# Only keep essential utilities for configuration and status
 
 
-class APPAOrchestrator:
+class APPAStatusManager:
     """
-    Main orchestrator for the APPA system.
+    Simplified status manager for the APPA system.
     
-    Coordinates the execution of all agents in the correct sequence.
+    Provides system status, configuration management, and logging support
+    for Claude Code agent operations.
     """
     
     def __init__(self, config_path: str = "config.yaml"):
@@ -46,14 +44,7 @@ class APPAOrchestrator:
             setup_logging(self.config)
             self.logger = get_logger(__name__)
             
-            # Initialize agents (with enhanced discovery agent)
-            self.discovery_agent = PaperDiscoveryAgent(self.config)  # Now delegates to enhanced agent
-            self.curation_agent = QualityCurationAgent(self.config)
-            self.analysis_agent = ContentAnalysisAgent(self.config)  # Now uses enhanced analysis
-            self.organization_agent = FileSystemOrganizationAgent(self.config)
-            self.linking_agent = CrossReferenceLinkingAgent(self.config)
-            
-            self.logger.info("APPA Orchestrator initialized successfully")
+            self.logger.info("APPA Status Manager initialized - using Claude Code agents")
             
         except ConfigError as e:
             print(f"Configuration error: {e}")
@@ -64,154 +55,53 @@ class APPAOrchestrator:
     
     def run_full_pipeline(self, incremental: bool = False) -> Dict[str, Any]:
         """
-        Run the complete APPA pipeline.
+        Legacy method - now returns information about using Claude Code agents.
         
-        Args:
-            incremental: Whether to run incremental update
-            
-        Returns:
-            Dictionary with pipeline execution results
+        The actual pipeline execution should be done using Claude Code agents:
+        - academic-researcher for paper discovery
+        - phm-quality-curator for quality curation
+        - phm-content-analyzer for content analysis
+        - phm-knowledge-organizer for organization
+        - phm-relationship-builder for linking
         """
-        self.logger.info("Starting APPA full pipeline execution")
-        start_time = datetime.now()
+        self.logger.warning("run_full_pipeline is deprecated - use Claude Code agents instead")
         
-        pipeline_results = {
-            'start_time': start_time.isoformat(),
-            'incremental': incremental,
-            'phases': {}
+        return {
+            'status': 'deprecated',
+            'message': 'Please use Claude Code agents directly',
+            'recommended_approach': [
+                '1. Use academic-researcher agent for paper discovery',
+                '2. Use phm-quality-curator agent for quality filtering',
+                '3. Use phm-content-analyzer agent for content analysis',
+                '4. Use phm-knowledge-organizer agent for organization',
+                '5. Use phm-relationship-builder agent for cross-referencing'
+            ],
+            'shell_scripts': [
+                './scripts/daily_greeting.sh - for daily updates',
+                './scripts/search_papers.sh - for paper search'
+            ]
         }
-        
-        try:
-            # Phase 1: Paper Discovery
-            self.logger.info("Phase 1: Paper Discovery")
-            discovery_input = self._prepare_discovery_input(incremental)
-            discovered_papers = self.discovery_agent.run(discovery_input)
-            pipeline_results['phases']['discovery'] = {
-                'papers_found': len(discovered_papers),
-                'status': 'completed'
-            }
-            
-            if not discovered_papers:
-                self.logger.warning("No papers discovered, stopping pipeline")
-                return pipeline_results
-            
-            # Phase 2: Quality Curation
-            self.logger.info("Phase 2: Quality Curation")
-            curated_papers = self.curation_agent.run(discovered_papers)
-            pipeline_results['phases']['curation'] = {
-                'papers_curated': len(curated_papers),
-                'status': 'completed'
-            }
-            
-            if not curated_papers:
-                self.logger.warning("No papers passed quality curation, stopping pipeline")
-                return pipeline_results
-            
-            # Phase 3: Content Analysis
-            self.logger.info("Phase 3: Content Analysis")
-            analyzed_papers = self.analysis_agent.run(curated_papers)
-            pipeline_results['phases']['analysis'] = {
-                'papers_analyzed': len(analyzed_papers),
-                'status': 'completed'
-            }
-            
-            # Phase 4: File System Organization
-            self.logger.info("Phase 4: File System Organization")
-            organization_results = self.organization_agent.run(analyzed_papers)
-            pipeline_results['phases']['organization'] = organization_results
-            
-            # Phase 5: Cross-Reference Linking
-            self.logger.info("Phase 5: Cross-Reference Linking")
-            linking_input = {
-                'papers': analyzed_papers,
-                'file_structure': organization_results
-            }
-            linking_results = self.linking_agent.run(linking_input)
-            pipeline_results['phases']['linking'] = linking_results
-            
-            # Update incremental date if successful
-            if incremental:
-                self._update_incremental_date()
-            
-            end_time = datetime.now()
-            duration = (end_time - start_time).total_seconds()
-            
-            pipeline_results.update({
-                'end_time': end_time.isoformat(),
-                'duration_seconds': duration,
-                'status': 'completed',
-                'total_papers_processed': len(analyzed_papers)
-            })
-            
-            self.logger.info(f"APPA pipeline completed successfully in {duration:.2f} seconds")
-            self.logger.info(f"Processed {len(analyzed_papers)} papers")
-            
-        except Exception as e:
-            self.logger.error(f"Pipeline execution failed: {e}")
-            pipeline_results.update({
-                'status': 'failed',
-                'error': str(e),
-                'end_time': datetime.now().isoformat()
-            })
-            raise
-        
-        return pipeline_results
     
     def run_discovery_only(self, incremental: bool = False) -> List[Dict[str, Any]]:
         """
-        Run only the paper discovery phase.
-        
-        Args:
-            incremental: Whether to run incremental discovery
-            
-        Returns:
-            List of discovered papers
+        Legacy method - use academic-researcher agent instead.
         """
-        self.logger.info("Running paper discovery only")
-        
-        discovery_input = self._prepare_discovery_input(incremental)
-        discovered_papers = self.discovery_agent.run(discovery_input)
-        
-        self.logger.info(f"Discovery completed: {len(discovered_papers)} papers found")
-        return discovered_papers
+        self.logger.warning("run_discovery_only is deprecated - use academic-researcher agent instead")
+        return []
     
     def run_analysis_only(self, papers: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
-        Run only the content analysis phase.
-        
-        Args:
-            papers: List of papers to analyze
-            
-        Returns:
-            List of analyzed papers
+        Legacy method - use phm-content-analyzer agent instead.
         """
-        self.logger.info(f"Running content analysis for {len(papers)} papers")
-        
-        analyzed_papers = self.analysis_agent.run(papers)
-        
-        self.logger.info(f"Analysis completed: {len(analyzed_papers)} papers analyzed")
-        return analyzed_papers
+        self.logger.warning("run_analysis_only is deprecated - use phm-content-analyzer agent instead")
+        return []
     
     def validate_links_only(self) -> Dict[str, Any]:
         """
-        Run only link validation.
-        
-        Returns:
-            Link validation results
+        Legacy method - use phm-relationship-builder agent instead.
         """
-        self.logger.info("Running link validation only")
-        
-        # Create dummy input for link validation
-        linking_input = {
-            'papers': [],
-            'file_structure': {}
-        }
-        
-        # Run only validation part
-        validation_results = self.linking_agent._validate_all_links()
-        
-        self.logger.info("Link validation completed")
-        return validation_results
+        self.logger.warning("validate_links_only is deprecated - use phm-relationship-builder agent instead")
+        return {'status': 'deprecated', 'message': 'Use phm-relationship-builder agent'}
     
     def _prepare_discovery_input(self, incremental: bool) -> Dict[str, Any]:
         """Prepare input for paper discovery agent."""
@@ -243,13 +133,19 @@ class APPAOrchestrator:
         status = {
             'timestamp': datetime.now().isoformat(),
             'config_loaded': bool(self.config),
-            'agents_initialized': True,
+            'system_type': 'Claude Code Agent Based',
+            'architecture': 'Shell Scripts → Claude Code Agents → Support Utils',
             'base_directories': {
                 'papers': os.path.exists('papers'),
                 'topics': os.path.exists('topics'),
                 'venues': os.path.exists('venues'),
                 'authors': os.path.exists('authors'),
                 'indices': os.path.exists('indices')
+            },
+            'available_scripts': {
+                'daily_greeting': os.path.exists('scripts/daily_greeting.sh'),
+                'search_papers': os.path.exists('scripts/search_papers.sh'),
+                'validate_awesome': os.path.exists('scripts/awesome-validate.sh')
             }
         }
         
@@ -269,8 +165,11 @@ class APPAOrchestrator:
 
 
 def main():
-    """Main entry point for APPA system."""
-    parser = argparse.ArgumentParser(description='APPA - Awesome PHM Paper Agent')
+    """Main entry point for APPA system status and configuration management."""
+    parser = argparse.ArgumentParser(
+        description='APPA - Awesome PHM Paper Agent (Status Manager)',
+        epilog='Note: APPA now uses Claude Code agents. Use shell scripts for operations.'
+    )
     parser.add_argument('--config', '-c', default='config.yaml', help='Configuration file path')
     parser.add_argument('--incremental', '-i', action='store_true', help='Run incremental update')
     parser.add_argument('--discovery-only', action='store_true', help='Run only paper discovery')
@@ -280,37 +179,42 @@ def main():
     args = parser.parse_args()
     
     try:
-        # Initialize orchestrator
-        orchestrator = APPAOrchestrator(args.config)
+        # Initialize status manager
+        status_manager = APPAStatusManager(args.config)
         
         if args.status:
             # Show system status
-            status = orchestrator.get_system_status()
+            status = status_manager.get_system_status()
             print("APPA System Status:")
+            print(f"  Architecture: {status['system_type']}")
             print(f"  Total papers: {status['total_papers']}")
             print(f"  Base directories exist: {all(status['base_directories'].values())}")
+            print(f"  Scripts available: {all(status['available_scripts'].values())}")
             print(f"  Last check: {status['timestamp']}")
+            print("\n💡 Use shell scripts to interact with Claude Code agents:")
+            print("  ./scripts/daily_greeting.sh - Daily status and updates")
+            print("  ./scripts/search_papers.sh - Search and manage papers")
             
         elif args.discovery_only:
-            # Run discovery only
-            papers = orchestrator.run_discovery_only(args.incremental)
-            print(f"Discovery completed: {len(papers)} papers found")
+            # Legacy method - show guidance
+            print("⚠️  Discovery-only mode is deprecated.")
+            print("💡 Use: academic-researcher agent via Claude Code instead")
             
         elif args.validate_links:
-            # Run link validation only
-            results = orchestrator.validate_links_only()
-            print(f"Link validation completed:")
-            print(f"  Internal links: {results.get('internal_links_validated', 0)}")
-            print(f"  External links: {results.get('external_links_validated', 0)}")
-            print(f"  Broken links: {results.get('broken_links_found', 0)}")
+            # Legacy method - show guidance
+            print("⚠️  Link validation mode is deprecated.")
+            print("💡 Use: phm-relationship-builder agent via Claude Code instead")
             
         else:
-            # Run full pipeline
-            results = orchestrator.run_full_pipeline(args.incremental)
-            print(f"APPA pipeline completed:")
-            print(f"  Status: {results['status']}")
-            print(f"  Duration: {results.get('duration_seconds', 0):.2f} seconds")
-            print(f"  Papers processed: {results.get('total_papers_processed', 0)}")
+            # Legacy pipeline - show guidance
+            print("⚠️  Full pipeline mode is deprecated.")
+            print("💡 APPA now uses Claude Code agents directly:")
+            print("  1. academic-researcher - for paper discovery")
+            print("  2. phm-quality-curator - for quality filtering")
+            print("  3. phm-content-analyzer - for content analysis")
+            print("  4. phm-knowledge-organizer - for organization")
+            print("  5. phm-relationship-builder - for cross-referencing")
+            print("\n🚀 Quick start: ./scripts/daily_greeting.sh")
             
     except KeyboardInterrupt:
         print("\nOperation cancelled by user")

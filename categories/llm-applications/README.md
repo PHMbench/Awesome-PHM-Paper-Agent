@@ -6,7 +6,7 @@
 
 This category encompasses the cutting-edge applications of Large Language Models (LLMs) including GPT, ChatGPT, and other foundation models in Prognostics and Health Management. This represents the newest frontier in AI-assisted industrial monitoring and maintenance.
 
-**Current Papers**: 15 papers  
+**Current Papers**: 10 papers  
 **Time Span**: 2023-2025  
 **Research Trend**: 🔥 **Extremely Hot** - Breakthrough applications with rapid industrial adoption
 
@@ -34,15 +34,11 @@ This category encompasses the cutting-edge applications of Large Language Models
 - **Impact**: Foundational theoretical work with 21 co-authors from multiple institutions
 - **Framework**: Three progressive paradigms addressing generalization, interpretation, and verification
 
-**Large Language Model Agents as Prognostics and Health Management Copilots** - Lukens, S. et al. (PHM Society, 2024) 🏆 [BibTeX]
+**Large Language Model Agents as Prognostics and Health Management Copilots** - Sarah Lukens, Lucas H. McCabe, Joshua Gen, Asma Ali (PHM Society, 2024) 🏆 [BibTeX](../../data/bibtex/2024-PHM-Lukens-Copilots.bib)
+- **DOI**: 10.36001/phmconf.2024.v16i1.3906
 - **Innovation**: "PHM Copilots" framework for industrial domain integration
 - **Focus**: Formalizing LLM agent considerations for industrial applications
 - **Impact**: Defining best practices for LLM deployment in PHM
-
-**Consultation on Industrial Machine Faults with Large Language Models** - Industrial Research Group (arXiv, 2024) ⭐ [BibTeX]
-- **Innovation**: Multi-round prompting methodology for fault consultation
-- **Method**: Structured prompting techniques for improved diagnostic accuracy
-- **Application**: Practical framework for industrial fault consultation
 
 **An Innovative Foundation Model for Bearing Prognostics and Health Management Through Pre-Trained Large Language Models** - Wenxuan Wang, Dan Wang (SSRN, 2024) 🏆 [BibTeX](../../data/bibtex/2024-SSRN-Wang-Foundation-Bearing.bib)
 - **DOI**: SSRN Abstract ID: 5127433
@@ -58,33 +54,12 @@ This category encompasses the cutting-edge applications of Large Language Models
 - **Application**: Bearing fault diagnosis in unknown operational domains
 - **Performance**: Robust fault detection without target domain training data
 
-**ChatGPT-like Large-Scale Foundation Models for PHM: A Survey and Roadmaps - Updated Edition** - Research Team (Reliability Engineering & System Safety, 2024) 🏆 [BibTeX](../../data/bibtex/2024-RESS-LLM-PHM-Survey.bib)
-- **Type**: Comprehensive updated survey
-- **Innovation**: Latest systematic analysis of LSF-Models for PHM applications
-- **Coverage**: Recent advances in LLM applications for industrial monitoring
-- **Roadmap**: Future directions for LLM-PHM integration
-
 ### 2025
 
 **Brain-Like Cognition-Driven Model Factory for IIoT Fault Diagnosis by Combining LLMs With Small Models** - Liu, Y. et al. (IEEE IoT Journal, 2025) 🏆 [BibTeX](../../data/bibtex/2025-IEEE-IoT-Brain-Cognition.bib)
 - **Innovation**: Novel BC-MF architecture using LLM as supervisor for personalized diagnostic models
 - **Method**: Brain-like chain of thoughts (BLCoTs) prompting with vertical federated learning
 - **Performance**: Superior results across multiple IIoT datasets
-
-**LLM-based Framework for Bearing Fault Diagnosis** - Research Team (MSSP, 2025) 🏆 [BibTeX](../../data/bibtex/2025-MSSP-LLM-Bearing.bib)
-- **Innovation**: LoRA and QLoRA-based fine-tuning framework for vibration data analysis
-- **Achievement**: Superior performance in cross-condition and small-sample scenarios
-- **Impact**: Systematic fault diagnosis feature system for comprehensive monitoring
-
-**Knowledge-Graph Enhanced LLM for Industry 5.0 Fault Diagnosis** - Industry 5.0 Research Group (IJPR, 2025) 🏆 [BibTeX](../../data/bibtex/2025-IJPR-KG-Industry5.bib)
-- **Innovation**: Industry 5.0 human-machine collaboration framework
-- **Method**: Knowledge graph integration with LLMs for enhanced reasoning
-- **Focus**: Automated maintenance decision support pipeline
-
-**LLM-TSFD: Industrial Time Series Human-in-the-Loop Fault Diagnosis** - TSFD Research Team (Expert Systems, 2025) 🏆 [BibTeX](../../data/bibtex/2025-ESWA-Time-Series-HITL.bib)
-- **Innovation**: Human-in-the-loop approach bridging human expertise with AI capabilities
-- **Application**: Real-time equipment status monitoring and anomaly identification
-- **Impact**: Practical industrial implementation framework
 
 ### 2023
 

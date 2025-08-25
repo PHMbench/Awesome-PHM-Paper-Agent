@@ -4,7 +4,7 @@
 
 *🔥 主要关注影响因子≥5的期刊论文 | 🚫 自动过滤MDPI等低质量出版商 | 🤖 由Claude Code Agent驱动更新*
 
-[![Papers](https://img.shields.io/badge/Papers-55-blue)](#papers)
+[![Papers](https://img.shields.io/badge/Papers-50-blue)](#papers)
 [![Quality](https://img.shields.io/badge/Quality-IF≥5.0-green)](#quality-standards)
 [![Last Update](https://img.shields.io/badge/Last%20Update-2025--01--25-orange)](#contributing)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue)](#license)
@@ -20,8 +20,8 @@
   - [NLP方法](#nlp-methods)
   - [持续学习](#continual-learning)
 - [按主题分类](#categories)
-  - [LLM Applications](categories/llm-applications/README.md) - 大语言模型专门应用 (15篇) 🚀
-  - [Transformer Models](categories/transformer-models/README.md) - Transformer架构专题 (8篇)
+  - [LLM Applications](categories/llm-applications/README.md) - 大语言模型专门应用 (10篇) 🚀
+  - [Transformer Models](categories/transformer-models/README.md) - Transformer架构专题 (5篇)
   - [Generative AI](categories/generative-ai/README.md) - 生成式AI方法 (7篇)
   - [Graph Neural Networks](categories/graph-neural-networks/README.md) - 图神经网络应用 (3篇) 🎆
   - [Reinforcement Learning](categories/reinforcement-learning/README.md) - 强化学习优化 (3篇) 🎮
@@ -31,6 +31,7 @@
   - [故障诊断](#fault-diagnosis)
   - [预测性维护](#predictive-maintenance)
   - [深度学习方法](#deep-learning-methods)
+- [系统架构](#system-architecture)
 - [质量标准](#quality-standards)
 - [如何贡献](#contributing)
 - [数据获取](#data-access)
@@ -146,6 +147,63 @@
 - **Large Language Models** (2 papers)
 - **Computer Vision** - *Coming Soon*
 - **Reinforcement Learning** - *Coming Soon*
+
+---
+
+## System Architecture
+
+APPA (Awesome PHM Paper Agent) 采用现代化的Claude Code Agent架构，实现智能化、自动化的学术论文管理。
+
+### 🏗️ 架构概览
+
+```
+Shell Scripts → Claude Code Agents → Support Utils
+     ↓              ↓                    ↓
+   用户界面      智能处理引擎        配置和工具支持
+```
+
+### 🤖 Claude Code Agents
+
+**APPA系统使用5个专门的Claude Code Agents:**
+
+| Agent | 功能 | 调用方式 |
+|-------|------|----------|
+| **academic-researcher** 🔥 | 主要文献搜索引擎，集成质量过滤 | 自动调用或手动请求 |
+| **phm-quality-curator** ⭐ | 多维度质量评估与筛选 | 论文质量评估时 |
+| **phm-content-analyzer** 📝 | 深度内容分析与摘要生成 | 论文分析需求时 |
+| **phm-knowledge-organizer** 📁 | 知识库组织与结构化 | 文档整理时 |
+| **phm-relationship-builder** 🔗 | 关系网络构建与交叉引用 | 建立论文关联时 |
+
+### 🖥️ 用户接口
+
+**主要通过Shell脚本与系统交互:**
+
+```bash
+# 每日状态更新
+./scripts/daily_greeting.sh
+
+# 论文搜索和管理
+./scripts/search_papers.sh --year 2024
+./scripts/search_papers.sh --author zhang
+
+# 系统状态检查
+python main.py --status
+```
+
+### 📊 系统特点
+
+- **🎯 专业化**: 每个Agent专注特定任务，提高效率
+- **🔄 自动化**: 自动论文发现、质量筛选、内容分析
+- **🚫 质量控制**: 内置MDPI过滤、影响因子筛选机制
+- **📚 真实数据**: 从ArXiv、Google Scholar等真实学术数据库获取
+- **🔗 智能链接**: 自动建立论文间交叉引用和关系网络
+
+### 💻 技术实现
+
+- **Shell Scripts**: 用户交互层，调用Claude Code agents
+- **Python Utils**: 配置管理、状态检查、支持工具
+- **Claude Code**: 核心智能处理引擎
+- **Markdown**: 标准化文档格式，GitHub友好
 
 ---
 

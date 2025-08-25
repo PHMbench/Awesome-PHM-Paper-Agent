@@ -4,7 +4,7 @@
 
 ## 📊 统计信息
 
-- **论文总数**: 2
+- **论文总数**: 3
 - **最新更新**: 2025-08-23
 - **主要技术**: 大语言模型、知识图谱、本地知识库
 
@@ -25,6 +25,13 @@
    - 期刊: IEEE Transactions on Industrial Informatics (2024)
    - **TL;DR**: 将航空装配知识图谱嵌入大语言模型，实现98.5%故障诊断准确率
    - **关键技术**: 知识图谱嵌入、前缀调优、检索增强
+
+3. **Deep Learning-Based Prognostics and Health Management Model for Pilot-Operated Cryogenic Safety Valves** [BibTeX](../../data/bibtex/2024-Sensors-Kim-Cryogenic.bib)
+   - Authors: Moohyun Kim, Haeyoung Seong, Daejun Kim
+   - Journal: Sensors (2024), Volume 24, Issue 6, Article 1814
+   - **DOI**: 10.3390/s24061814
+   - **TL;DR**: Deep learning approach for prognostics and health management of industrial cryogenic safety valves
+   - **Key Technologies**: Deep neural networks, Cryogenic systems, Safety valve monitoring
 
 ## 🔍 研究趋势
 
